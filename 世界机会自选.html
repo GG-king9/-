@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>世界机会自选 - 留学规划</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="海外实习与科研机会智能推荐，衔接背景提升与职业规划" />
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { primary: '#165DFF', accent: '#36D399', green: '#99BF38', blue: '#2FADDE', dark: '#0d1b2a', glass: 'rgba(255,255,255,0.08)' },
+        fontFamily: { sans: ['"Noto Sans SC"', 'Inter', 'system-ui', 'sans-serif'] },
+        animation: { 'float': 'float 4s ease-in-out infinite', 'glow': 'glow 2s ease-in-out infinite' },
+        keyframes: {
+          float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+          glow: { '0%,100%': { boxShadow: '0 0 20px rgba(54,211,153,0.3)' }, '50%': { boxShadow: '0 0 40px rgba(54,211,153,0.7)' } },
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+/* ===== 全局重置 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif; background: #0d1b2a; color: #e8f0fe; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+/* ===== 背景 ===== */
+.bg-orb { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
+.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #165DFF 0%, transparent 70%); top: -10%; left: -10%; animation: float 8s ease-in-out infinite; opacity: 0.35; }
+.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, #36D399 0%, transparent 70%); bottom: 5%; right: -5%; animation: float 10s ease-in-out infinite 2s; opacity: 0.25; }
+.orb3 { width: 300px; height: 300px; background: radial-gradient(circle, #99BF38 0%, transparent 70%); top: 40%; left: 40%; animation: float 7s ease-in-out infinite 4s; opacity: 0.15; }
+@keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+#app { position: relative; z-index: 1; }
+
+/* ===== 导航栏 ===== */
+#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: all 0.4s ease; }
+#navbar.scrolled { background: rgba(13,27,42,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(54,211,153,0.15); box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+.nav-inner { max-width: 1400px; margin: 0 auto; padding: 0 28px; height: 68px; display: flex; align-items: center; gap: 0; }
+.nav-inner .nav-links { flex: 1; justify-content: center; }
+.nav-right-group { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.nav-contact-inline { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; border-left: 1px solid rgba(54,211,153,0.2); padding-left: 16px; margin-left: 4px; }
+.nav-contact-inline .nc-phone { font-size: 11.5px; font-weight: 600; color: rgba(232,240,254,0.85); white-space: nowrap; }
+.nav-contact-inline .nc-email { font-size: 12.5px; font-weight: 500; color: #36D399; text-decoration: none; white-space: nowrap; }
+.nav-contact-inline .nc-email:hover { opacity: 0.75; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-globe-new { width: 40px; height: 40px; background: linear-gradient(135deg, #99BF38, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 20px rgba(153,191,56,0.4); animation: glow 3s ease-in-out infinite; }
+.logo-texts { display: flex; flex-direction: column; line-height: 1.2; }
+.logo-title-new { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+.logo-title-new span { color: #36D399; }
+.logo-sub-new { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; }
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link { padding: 7px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; color: rgba(232,240,254,0.8); text-decoration: none; transition: all 0.25s ease; border: 1px solid transparent; }
+.nav-link:hover { background: rgba(54,211,153,0.1); border-color: rgba(54,211,153,0.3); color: #36D399; }
+.nav-link.active { background: linear-gradient(135deg, rgba(22,93,255,0.3), rgba(54,211,153,0.2)); border-color: rgba(54,211,153,0.4); color: #fff; }
+.nav-cta { padding: 9px 22px; background: linear-gradient(135deg, #165DFF, #36D399); border-radius: 24px; font-size: 14px; font-weight: 700; color: #fff; text-decoration: none; cursor: pointer; border: none; box-shadow: 0 4px 20px rgba(22,93,255,0.4); transition: all 0.3s ease; }
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(22,93,255,0.55); }
+
+/* ===== 页面主体 ===== */
+.page-content { padding: 120px 32px 60px; max-width: 1280px; margin: 0 auto; }
+
+/* ===== 英雄区 ===== */
+.hero-banner { background: linear-gradient(135deg, rgba(22,93,255,0.2), rgba(54,211,153,0.15)); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 48px; text-align: center; margin-bottom: 40px; }
+.hero-banner-icon { font-size: 56px; margin-bottom: 20px; }
+.hero-banner h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 900; color: #fff; margin-bottom: 12px; }
+.hero-banner p { font-size: 16px; color: rgba(232,240,254,0.6); max-width: 600px; margin: 0 auto; }
+
+/* ===== 筛选区 ===== */
+.filter-section { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 28px; margin-bottom: 32px; }
+.filter-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; }
+.filter-field { flex: 1; min-width: 200px; }
+.filter-label { display: block; font-size: 13px; font-weight: 600; color: #36D399; margin-bottom: 8px; }
+.filter-select { width: 100%; padding: 12px 16px; font-size: 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #e8f0fe; outline: none; transition: all 0.3s; }
+.filter-select:focus { border-color: #36D399; box-shadow: 0 0 0 3px rgba(54,211,153,0.1); }
+.filter-radio-group { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; padding: 8px 0; }
+.filter-radio-label { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(232,240,254,0.7); cursor: pointer; }
+.filter-radio-label input { accent-color: #36D399; cursor: pointer; }
+.filter-extra-toggle { display: inline-block; margin-top: 16px; font-size: 13px; color: #36D399; cursor: pointer; font-weight: 600; }
+.filter-extra-toggle:hover { opacity: 0.8; }
+.filter-extra { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed rgba(54,211,153,0.2); }
+.filter-extra.show { display: block; }
+.filter-buttons { text-align: center; margin-top: 20px; display: flex; gap: 12px; justify-content: center; }
+.filter-btn { padding: 12px 28px; border-radius: 24px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+.filter-btn-primary { background: linear-gradient(135deg, #165DFF, #36D399); color: #fff; border: none; }
+.filter-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(22,93,255,0.4); }
+.filter-btn-secondary { background: transparent; color: rgba(232,240,254,0.7); border: 1px solid rgba(255,255,255,0.2); }
+.filter-btn-secondary:hover { border-color: rgba(54,211,153,0.4); color: #36D399; }
+
+/* ===== 区块标题 ===== */
+.section-title { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.section-title-line { width: 4px; height: 28px; background: linear-gradient(135deg, #36D399, #2FADDE); border-radius: 2px; flex-shrink: 0; }
+.section-title-text { font-size: 22px; font-weight: 700; color: #fff; margin: 0; }
+.section-title-count { font-size: 12px; background: rgba(54,211,153,0.15); color: #36D399; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
+
+/* ===== 推荐卡片 ===== */
+.opportunities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.opportunity-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; transition: all 0.4s cubic-bezier(.34,1.56,.64,1); cursor: pointer; position: relative; }
+.opportunity-card:hover { transform: translateY(-6px); border-color: rgba(54,211,153,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(54,211,153,0.1); }
+.opp-card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.opp-badge { font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 600; flex-shrink: 0; }
+.badge-research { background: rgba(47,173,222,0.2); color: #2FADDE; }
+.badge-intern { background: rgba(255,159,67,0.2); color: #ff9f43; }
+.badge-school { background: rgba(153,191,56,0.2); color: #99BF38; }
+.opp-card-title { font-size: 16px; font-weight: 700; color: #fff; margin: 0; line-height: 1.4; flex: 1; }
+.opp-card-org { font-size: 13px; color: rgba(232,240,254,0.5); margin: 8px 0; display: flex; align-items: center; gap: 8px; }
+.opp-card-match { position: absolute; top: 16px; right: 16px; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; }
+.match-high { background: rgba(54,211,153,0.2); color: #36D399; }
+.match-mid { background: rgba(255,159,67,0.2); color: #ff9f43; }
+.match-low { background: rgba(255,255,255,0.1); color: rgba(232,240,254,0.4); }
+.opp-card-req { font-size: 13px; color: rgba(232,240,254,0.6); background: rgba(0,0,0,0.2); border-radius: 10px; padding: 12px; line-height: 1.6; margin-bottom: 12px; }
+.opp-card-req strong { color: #36D399; }
+.opp-card-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.opp-card-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.opp-tag { font-size: 11px; padding: 4px 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: rgba(232,240,254,0.5); }
+.opp-save-btn { background: none; border: none; font-size: 18px; cursor: pointer; transition: transform 0.2s; }
+.opp-save-btn:hover { transform: scale(1.2); }
+
+/* ===== 经验墙 ===== */
+.exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.exp-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; transition: all 0.3s; }
+.exp-card:hover { border-color: rgba(54,211,153,0.2); transform: translateY(-4px); }
+.exp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.exp-avatar { width: 44px; height: 44px; background: linear-gradient(135deg, #36D399, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 16px; }
+.exp-info h4 { font-size: 15px; font-weight: 600; color: #fff; margin: 0 0 4px; }
+.exp-info p { font-size: 12px; color: rgba(232,240,254,0.4); margin: 0; }
+.exp-content { font-size: 13px; color: rgba(232,240,254,0.7); line-height: 1.7; }
+
+/* ===== 咨询横幅 ===== */
+.consult-banner { background: linear-gradient(135deg, rgba(22,93,255,0.15), rgba(54,211,153,0.1)); border: 1px solid rgba(54,211,153,0.2); border-radius: 20px; padding: 32px; display: flex; align-items: center; justify-content: space-between; margin-top: 48px; }
+.consult-left { display: flex; align-items: center; gap: 16px; }
+.consult-icon { width: 56px; height: 56px; background: linear-gradient(135deg, #36D399, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.consult-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0 0 4px; }
+.consult-sub { font-size: 13px; color: rgba(232,240,254,0.5); margin: 0; }
+.consult-btn { padding: 14px 32px; background: linear-gradient(135deg, #165DFF, #36D399); color: #fff; border-radius: 28px; font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.3s; }
+.consult-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(22,93,255,0.4); }
+
+/* ===== 热门院校 ===== */
+.schools-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 1024px) { .schools-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .schools-grid { grid-template-columns: 1fr; } }
+.school-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; transition: all 0.3s; cursor: pointer; }
+.school-card:hover { transform: translateY(-4px); border-color: rgba(54,211,153,0.3); box-shadow: 0 16px 32px rgba(0,0,0,0.3); }
+.school-card img { width: 100%; height: 140px; object-fit: cover; }
+.school-card-content { padding: 16px; }
+.school-card h4 { font-size: 14px; font-weight: 600; color: #fff; margin: 0; }
+
+/* ===== 页脚 ===== */
+footer { background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08); padding: 60px 32px 0; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
+.footer-brand .logo-globe-new { width: 36px; height: 36px; font-size: 16px; }
+.footer-desc { font-size: 13px; color: rgba(232,240,254,0.5); line-height: 1.8; margin-top: 14px; max-width: 280px; }
+.footer-col h6 { font-size: 13px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { font-size: 13px; color: rgba(232,240,254,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: #36D399; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding: 20px 0; max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: rgba(232,240,254,0.3); }
+.footer-social { display: flex; gap: 10px; }
+.footer-social a { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 13px; color: rgba(232,240,254,0.5); text-decoration: none; transition: all 0.25s; }
+.footer-social a:hover { background: rgba(54,211,153,0.15); border-color: rgba(54,211,153,0.4); color: #36D399; }
+
+/* ===== 弹窗 ===== */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(8,16,28,0.85); backdrop-filter: blur(12px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: rgba(18,32,52,0.98); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 32px; max-width: 900px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; }
+.modal-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; color: rgba(232,240,254,0.6); font-size: 18px; cursor: pointer; transition: all 0.2s; z-index: 10; }
+.modal-close:hover { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+
+/* ===== 3D实景弹窗 ===== */
+.streetview-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
+.streetview-tab { padding: 8px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; color: rgba(232,240,254,0.7); font-size: 13px; cursor: pointer; transition: all 0.25s; }
+.streetview-tab:hover { background: rgba(54,211,153,0.1); border-color: rgba(54,211,153,0.3); color: #36D399; }
+.streetview-tab.active { background: linear-gradient(135deg, #165DFF, #36D399); border-color: transparent; color: #fff; }
+.streetview-scene { display: none; width: 100%; height: 60vh; border-radius: 12px; overflow: hidden; }
+.streetview-scene.active { display: block; }
+.streetview-scene iframe { width: 100%; height: 100%; border: none; }
+.streetview-header { text-align: center; margin-bottom: 16px; }
+.streetview-header h3 { font-size: 18px; color: #fff; margin-bottom: 4px; }
+.streetview-header p { font-size: 12px; color: rgba(232,240,254,0.5); }
+
+/* 响应式 */
+@media (max-width: 1024px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .nav-contact-inline { display: none; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .page-content { padding: 100px 16px 40px; }
+  .filter-row { flex-direction: column; }
+  .filter-field { min-width: 100%; }
+  .consult-banner { flex-direction: column; text-align: center; gap: 20px; }
+}
+</style>
+</head>
+<body>
+<!-- 背景光晕 -->
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<div id="app">
+<!-- ===== 导航栏 ===== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-globe-new">🎓</div>
+      <div class="logo-texts">
+        <div class="logo-title-new">留学<span>规划</span></div>
+        <div class="logo-sub-new">One-Stop Solution</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">主页</a>
+      <a href="在线云校验.html" class="nav-link">在线云校验</a>
+      <a href="互助中心服务.html" class="nav-link">互助中心</a>
+      <a href="世界机会自选.html" class="nav-link active">院校机遇一览</a>
+      <a href="智能留学规划.html" class="nav-link">智能留学规划</a>
+    </div>
+    <div class="nav-right-group">
+      <a href="#" class="nav-cta">立即AI测评</a>
+      <div class="nav-contact-inline">
+        <span class="nc-phone">020-37512006</span>
+        <a href="mailto:zjxybgs@scauzj.edu.cn" class="nc-email">zjxybgs@scauzj.edu.cn</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== 页面主体 ===== -->
+<div class="page-content">
+  <!-- 英雄区 -->
+  <div class="hero-banner">
+    <div class="hero-banner-icon">🚀</div>
+    <h1>海外实习 <span style="color:#36D399;">&</span> 科研机会智能推荐</h1>
+    <p>衔接背景提升与职业规划，智能匹配可落地的海外实践机会</p>
+  </div>
+
+  <!-- 筛选区 -->
+  <div class="filter-section">
+    <div class="filter-row">
+      <div class="filter-field">
+        <label class="filter-label">📚 专业方向</label>
+        <select id="fMajor" class="filter-select">
+          <option value="">全部专业</option>
+          <option value="cs">💻 计算机 / 人工智能</option>
+          <option value="fin">📊 金融 / 会计</option>
+          <option value="biz">🏢 商科 / 管理</option>
+          <option value="econ">📈 经济</option>
+          <option value="ee">⚡ 电子 / 电气</option>
+          <option value="me">🔧 机械 / 自动化</option>
+          <option value="data">📊 数据科学</option>
+          <option value="bio">🧬 生物 / 医学</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label class="filter-label">🌍 目标国家</label>
+        <select id="fCountry" class="filter-select">
+          <option value="">全部国家</option>
+          <option value="US">🇺🇸 美国</option>
+          <option value="UK">🇬🇧 英国</option>
+          <option value="DE">🇩🇪 德国</option>
+          <option value="SE">🇸🇪 瑞典</option>
+          <option value="SG">🇸🇬 新加坡</option>
+          <option value="JP">🇯🇵 日本</option>
+          <option value="CN">🇨🇳 中国</option>
+          <option value="AU">🇦🇺 澳大利亚</option>
+          <option value="CA">🇨🇦 加拿大</option>
+        </select>
+      </div>
+      <div class="filter-field">
+        <label class="filter-label">⏰ 时间周期</label>
+        <div class="filter-radio-group">
+          <label class="filter-radio-label"><input type="radio" name="fPeriod" value="all" checked> 全部</label>
+          <label class="filter-radio-label"><input type="radio" name="fPeriod" value="term"> 学期内</label>
+          <label class="filter-radio-label"><input type="radio" name="fPeriod" value="vacation"> 寒暑假</label>
+        </div>
+      </div>
+    </div>
+    <a class="filter-extra-toggle" onclick="toggleExtra()">⚙️ 附加筛选 <span id="extraArrow">▼</span></a>
+    <div id="extraFilters" class="filter-extra">
+      <div class="filter-row">
+        <div class="filter-field">
+          <label class="filter-label">🏷️ 岗位类型</label>
+          <select id="fType" class="filter-select">
+            <option value="">不限</option>
+            <option value="intern">🏢 企业实习</option>
+            <option value="research">🔬 科研助理</option>
+            <option value="school">🏫 校企合作</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label class="filter-label">🎓 学历要求</label>
+          <select id="fDegree" class="filter-select">
+            <option value="">不限</option>
+            <option value="bachelor">本科在读</option>
+            <option value="master">硕士在读</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label class="filter-label">💻 是否远程</label>
+          <select id="fRemote" class="filter-select">
+            <option value="">不限</option>
+            <option value="onsite">线下实地</option>
+            <option value="remote">线上远程</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="filter-buttons">
+      <button class="filter-btn filter-btn-primary" onclick="doRecommend()">🔍 智能推荐</button>
+      <button class="filter-btn filter-btn-secondary" onclick="resetFilters()">🔄 重置</button>
+    </div>
+  </div>
+
+  <!-- 推荐结果 -->
+  <div class="section-title">
+    <span class="section-title-line"></span>
+    <h3 class="section-title-text">📌 为你推荐的机会</h3>
+    <span class="section-title-count" id="resultCount"></span>
+  </div>
+  <div class="opportunities-grid" id="recommendGrid"></div>
+
+  <!-- 学长学姐经验 -->
+  <div class="section-title" style="margin-top:48px;">
+    <span class="section-title-line"></span>
+    <h3 class="section-title-text">👩‍🎓 学长学姐申请经验</h3>
+  </div>
+  <div class="exp-grid" id="expGrid"></div>
+
+  <!-- 咨询横幅 -->
+  <div class="consult-banner">
+    <div class="consult-left">
+      <div class="consult-icon">💬</div>
+      <div>
+        <div class="consult-title">还有疑问？咨询留学顾问</div>
+        <div class="consult-sub">一对一解答实习/科研申请问题，获取个性化推荐方案</div>
+      </div>
+    </div>
+    <a href="智能留学规划.html" class="consult-btn">立即咨询 →</a>
+  </div>
+
+  <!-- 热门院校 -->
+  <div class="section-title" style="margin-top:48px;">
+    <span class="section-title-line"></span>
+    <h3 class="section-title-text">🎓 热门留学院校（点击查看3D实景）</h3>
+  </div>
+  <div class="schools-grid">
+    <div class="school-card" data-school="mit"><img src="img/works/1.jpg" alt="MIT"><div class="school-card-content"><h4>MIT 麻省理工</h4></div></div>
+    <div class="school-card" data-school="oxford"><img src="img/works/3.jpg" alt="Oxford"><div class="school-card-content"><h4>Oxford 牛津</h4></div></div>
+    <div class="school-card" data-school="anu"><img src="img/works/7.jpg" alt="ANU"><div class="school-card-content"><h4>ANU 澳洲国立</h4></div></div>
+    <div class="school-card" data-school="toronto"><img src="img/works/5.jpg" alt="Toronto"><div class="school-card-content"><h4>多伦多大学</h4></div></div>
+    <div class="school-card" data-school="nus"><img src="img/works/8.jpg" alt="NUS"><div class="school-card-content"><h4>NUS 新国立</h4></div></div>
+    <div class="school-card" data-school="chuo"><img src="img/works/6.jpg" alt="Chuo"><div class="school-card-content"><h4>中央大学</h4></div></div>
+    <div class="school-card" data-school="tum"><img src="img/works/2.jpg" alt="TUM"><div class="school-card-content"><h4>TUM 慕尼黑工大</h4></div></div>
+    <div class="school-card" data-school="um"><img src="img/works/4.jpg" alt="UM"><div class="school-card-content"><h4>UM 马来国立</h4></div></div>
+  </div>
+</div>
+
+<!-- 3D实景弹窗 -->
+<div class="modal-overlay" id="streetview-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeStreetviewModal()">✕</button>
+    <div class="streetview-header">
+      <h3>🌍 3D实景云游校</h3>
+      <p>点击下方标签切换8国顶尖名校 · 谷歌街景级体验</p>
+    </div>
+    <div class="streetview-tabs">
+      <div class="streetview-tab active" data-scene="mit">MIT 麻省理工</div>
+      <div class="streetview-tab" data-scene="oxford">牛津大学</div>
+      <div class="streetview-tab" data-scene="anu">ANU 澳洲国立</div>
+      <div class="streetview-tab" data-scene="toronto">多伦多大学</div>
+      <div class="streetview-tab" data-scene="nus">NUS 新国立</div>
+      <div class="streetview-tab" data-scene="chuo">中央大学</div>
+      <div class="streetview-tab" data-scene="tum">TUM 慕尼黑工大</div>
+      <div class="streetview-tab" data-scene="um">UM 马来国立</div>
+    </div>
+    <div id="mit" class="streetview-scene active">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d-71.093584!3d42.359888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="oxford" class="streetview-scene">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d-1.254364!3d51.754816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="anu" class="streetview-scene">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d149.120709!3d-35.278346!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="toronto" class="streetview-scene">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d-79.395711!3d43.662663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="nus" class="streetview-scene">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d103.773338!3d1.296613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="chuo" class="streetview-scene">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d139.699985!3d35.659495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="tum" class="streetview-scene">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d11.566065!3d48.149473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="um" class="streetview-scene">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2948.852366935094!2d101.723241!3d3.107652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1szh-CN!2sus!4v9999999999!5m2!1szh-CN!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 页脚 ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-globe-new">🎓</div>
+        <div class="logo-texts">
+          <div class="logo-title-new" style="font-size:16px;">留学<span>规划</span></div>
+          <div class="logo-sub-new">One-Stop Solution</div>
+        </div>
+      </a>
+      <p class="footer-desc">一站式专业留学服务平台，AI智能测评精准匹配</p>
+      <p class="footer-desc" style="margin-top:10px;">📞 020-37512006 / 020-87990713<br>✉ zjxybgs@scauzj.edu.cn</p>
+    </div>
+    <div class="footer-col">
+      <h6>快速导航</h6>
+      <ul>
+        <li><a href="index.html">主页</a></li>
+        <li><a href="在线云校验.html">在线云校验</a></li>
+        <li><a href="互助中心服务.html">互助中心</a></li>
+        <li><a href="世界机会自选.html">院校机遇一览</a></li>
+        <li><a href="智能留学规划.html">智能留学规划</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>热门目的地</h6>
+      <ul>
+        <li><a href="#">英国留学</a></li>
+        <li><a href="#">澳大利亚留学</a></li>
+        <li><a href="#">新加坡留学</a></li>
+        <li><a href="#">加拿大留学</a></li>
+        <li><a href="#">美国留学</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>服务支持</h6>
+      <ul>
+        <li><a href="#">常见问题</a></li>
+        <li><a href="#">申请指南</a></li>
+        <li><a href="#">联系我们</a></li>
+        <li><a href="#">隐私政策</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 留学规划. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="#" title="微信">💬</a>
+      <a href="#" title="微博">📱</a>
+      <a href="#" title="QQ">🐧</a>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- ===== 详情弹窗 ===== -->
+<div id="internModal" class="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+// 导航栏滚动
+window.addEventListener('scroll', function() {
+  var navbar = document.getElementById('navbar');
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// 筛选展开/收起
+function toggleExtra() {
+  var extra = document.getElementById('extraFilters');
+  var arrow = document.getElementById('extraArrow');
+  extra.classList.toggle('show');
+  arrow.textContent = extra.classList.contains('show') ? '▲' : '▼';
+}
+
+// 数据模拟 - 扩展到50+真实可跳转机会，覆盖所有筛选组合
+var opportunitiesData = [
+  // ===== 计算机/AI (cs) =====
+  { id: 1, title: 'Machine Learning Research Assistant', org: 'Stanford AI Lab', country: 'US', type: 'research', degree: 'master', match: 95, req: 'Python, TensorFlow, 机器学习基础', period: 'term', remote: 'onsite', tags: ['Stanford', 'AI', '科研'], url: 'https://ai.stanford.edu/', major: 'cs' },
+  { id: 2, title: 'Software Engineering Internship', org: 'Google', country: 'US', type: 'intern', degree: 'bachelor', match: 93, req: 'Java/Python, 数据结构, 系统设计', period: 'vacation', remote: 'onsite', tags: ['Google', '码农', '实习'], url: 'https://careers.google.com/students/', major: 'cs' },
+  { id: 3, title: 'Software Engineer Intern', org: 'Microsoft', country: 'US', type: 'intern', degree: 'bachelor', match: 90, req: 'C#, .NET, 云计算', period: 'vacation', remote: 'hybrid', tags: ['微软', '后端', '实习'], url: 'https://careers.microsoft.com/students', major: 'cs' },
+  { id: 4, title: 'AI Research Intern', org: 'Oxford University', country: 'UK', type: 'research', degree: 'master', match: 94, req: '深度学习, Python, 论文阅读', period: 'term', remote: 'onsite', tags: ['牛津', 'AI', '科研'], url: 'https://www.ox.ac.uk/admissions/graduate', major: 'cs' },
+  { id: 5, title: 'Software Development Intern', org: 'Imperial College', country: 'UK', type: 'intern', degree: 'master', match: 88, req: 'Java, 数据结构, 算法', period: 'term', remote: 'onsite', tags: ['帝国理工', '软件', '实习'], url: 'https://www.imperial.ac.uk/study/pg/', major: 'cs' },
+  { id: 6, title: 'Research Assistant', org: 'NUS', country: 'SG', type: 'research', degree: 'master', match: 91, req: 'Python, 机器学习, 英文论文', period: 'term', remote: 'onsite', tags: ['NUS', '科研', 'AI'], url: 'https://www.nus.edu.sg/admissions/graduate', major: 'cs' },
+  { id: 7, title: 'Software Engineering Intern', org: 'ByteDance', country: 'CN', type: 'intern', degree: 'bachelor', match: 90, req: 'Go/Python, 分布式系统', period: 'vacation', remote: 'onsite', tags: ['字节', 'TikTok', '实习'], url: 'https://job.bytedance.com/campus/', major: 'cs' },
+  { id: 8, title: 'Tech Intern', org: 'Tencent', country: 'CN', type: 'intern', degree: 'bachelor', match: 87, req: 'C++, 操作系统, 网络', period: 'vacation', remote: 'onsite', tags: ['腾讯', '后台', '实习'], url: 'https://careers.tencent.com/', major: 'cs' },
+  { id: 9, title: 'Software Engineer', org: 'Bosch', country: 'DE', type: 'intern', degree: 'master', match: 82, req: '嵌入式C, 汽车软件', period: 'term', remote: 'onsite', tags: ['博世', '汽车软件', '实习'], url: 'https://www.bosch.com/careers/', major: 'cs' },
+  { id: 10, title: 'Research Scientist', org: 'ETH Zurich', country: 'CH', type: 'research', degree: 'master', match: 93, req: 'Python, 机器人, CV', period: 'term', remote: 'onsite', tags: ['苏黎世理工', '科研', '机器人'], url: 'https://www.ethz.ch/admission.html', major: 'cs' },
+  { id: 11, title: 'Data Science Intern', org: 'Spotify', country: 'SE', type: 'intern', degree: 'bachelor', match: 85, req: 'Python, SQL, 推荐系统', period: 'vacation', remote: 'onsite', tags: ['Spotify', '音乐', '数据'], url: 'https://www.spotifyjobs.com/', major: 'cs' },
+  { id: 12, title: 'ML Engineer Intern', org: 'Toyota', country: 'JP', type: 'intern', degree: 'master', match: 80, req: 'Python, 自动驾驶', period: 'term', remote: 'onsite', tags: ['丰田', '自动驾驶', '实习'], url: 'https://toyota.recruitment.jp/en/', major: 'cs' },
+  
+  // ===== 数据科学 (data) =====
+  { id: 13, title: 'Data Science Summer Program', org: 'Meta', country: 'US', type: 'intern', degree: 'bachelor', match: 91, req: 'Python, SQL, 机器学习基础', period: 'vacation', remote: 'hybrid', tags: ['Meta', '数据', '实习'], url: 'https://metacareers.com/internships', major: 'data' },
+  { id: 14, title: 'Data Analyst Intern', org: 'Amazon', country: 'US', type: 'intern', degree: 'bachelor', match: 88, req: 'SQL, Excel, Tableau', period: 'vacation', remote: 'onsite', tags: ['亚马逊', '数据分析', '实习'], url: 'https://www.amazon.jobs/students', major: 'data' },
+  { id: 15, title: 'Data Science Intern', org: 'Apple', country: 'US', type: 'intern', degree: 'master', match: 89, req: 'Python, R, 统计', period: 'term', remote: 'onsite', tags: ['苹果', '数据', '实习'], url: 'https://jobs.apple.com/', major: 'data' },
+  { id: 16, title: 'Data Analyst', org: 'LSEG', country: 'UK', type: 'intern', degree: 'bachelor', match: 82, req: 'Python, 金融数据, SQL', period: 'term', remote: 'onsite', tags: ['伦敦证交所', '金融数据', '实习'], url: 'https://www.lseg.com/careers', major: 'data' },
+  { id: 17, title: 'Data Analyst Intern', org: 'Tencent', country: 'CN', type: 'intern', degree: 'bachelor', match: 88, req: 'SQL, Python, 数据可视化', period: 'vacation', remote: 'hybrid', tags: ['腾讯', '数据', '实习'], url: 'https://careers.tencent.com/', major: 'data' },
+  { id: 18, title: 'Data Science Intern', org: 'Shopee', country: 'SG', type: 'intern', degree: 'master', match: 86, req: 'Python, 电商数据, ML', period: 'vacation', remote: 'onsite', tags: ['Shopee', '电商', '数据'], url: 'https://careers.shopee.com/', major: 'data' },
+  { id: 19, title: 'Analytics Intern', org: 'Mercedes-Benz', country: 'DE', type: 'intern', degree: 'master', match: 81, req: 'SQL, 汽车大数据', period: 'term', remote: 'onsite', tags: ['奔驰', '汽车', '数据'], url: 'https://group.mercedes-benz.com/careers/', major: 'data' },
+  { id: 20, title: 'Data Science Research', org: 'University of Tokyo', country: 'JP', type: 'research', degree: 'master', match: 84, req: 'Python, 统计, AI', period: 'term', remote: 'onsite', tags: ['东大', '科研', '数据'], url: 'https://www.u-tokyo.ac.jp/admission/', major: 'data' },
+  
+  // ===== 金融/会计 (fin) =====
+  { id: 21, title: 'Investment Banking Internship', org: 'Goldman Sachs', country: 'US', type: 'intern', degree: 'bachelor', match: 89, req: '金融基础, 英语流利, 分析能力', period: 'vacation', remote: 'onsite', tags: ['高盛', '投行', '高薪'], url: 'https://www.goldmansachs.com/careers/students', major: 'fin' },
+  { id: 22, title: 'Quantitative Developer', org: 'J.P. Morgan', country: 'US', type: 'intern', degree: 'master', match: 90, req: 'C++, Python, 量化基础', period: 'vacation', remote: 'onsite', tags: ['摩根', '量化', '金融'], url: 'https://careers.jpmorgan.com/student-careers', major: 'fin' },
+  { id: 23, title: 'Trading Intern', org: 'Morgan Stanley', country: 'US', type: 'intern', degree: 'bachelor', match: 87, req: '金融市场, 建模, 英语', period: 'vacation', remote: 'onsite', tags: ['摩根士丹利', '交易', '实习'], url: 'https://www.morganstanley.com/careers', major: 'fin' },
+  { id: 24, title: 'Quantitative Analyst', org: 'Oxford University', country: 'UK', type: 'research', degree: 'master', match: 92, req: '金融数学, Python, 随机过程', period: 'term', remote: 'onsite', tags: ['牛津', '量化', '科研'], url: 'https://www.ox.ac.uk/admissions/graduate', major: 'fin' },
+  { id: 25, title: 'FinTech Innovation Lab', org: 'Revolut', country: 'UK', type: 'intern', degree: 'bachelor', match: 84, req: '金融科技, 区块链, 产品思维', period: 'term', remote: 'onsite', tags: ['FinTech', '创业', '金融'], url: 'https://careers.revolut.com/', major: 'fin' },
+  { id: 26, title: 'Investment Analyst', org: 'BlackRock', country: 'UK', type: 'intern', degree: 'master', match: 86, req: '投资分析, Python, 报告', period: 'term', remote: 'onsite', tags: ['贝莱德', '资管', '实习'], url: 'https://careers.blackrock.com/', major: 'fin' },
+  { id: 27, title: 'Finance Intern', org: 'Alibaba', country: 'CN', type: 'intern', degree: 'bachelor', match: 85, req: '财务分析, 报表, Excel', period: 'vacation', remote: 'onsite', tags: ['阿里', '财务', '实习'], url: 'https://campus.alibaba.com/', major: 'fin' },
+  { id: 28, title: 'Quantitative Researcher', org: 'Two Sigma', country: 'US', type: 'research', degree: 'master', match: 93, req: 'Python, 机器学习, 量化策略', period: 'term', remote: 'onsite', tags: ['Two Sigma', '量化', '对冲'], url: 'https://careers.twosigma.com/', major: 'fin' },
+  { id: 29, title: 'Private Banking Intern', org: 'UBS', country: 'CH', type: 'intern', degree: 'bachelor', match: 83, req: '财富管理, 客户沟通, 多语言', period: 'term', remote: 'onsite', tags: ['瑞银', '私行', '实习'], url: 'https://www.ubs.com/careers', major: 'fin' },
+  { id: 30, title: 'Venture Capital Intern', org: 'Sequoia Capital', country: 'US', type: 'school', degree: 'master', match: 88, req: '投资分析, 创业思维, 行业研究', period: 'term', remote: 'onsite', tags: ['红杉', 'VC', '实习'], url: 'https://www.sequoiacap.com/careers/', major: 'fin' },
+  
+  // ===== 商科/管理 (biz) =====
+  { id: 31, title: 'Product Manager Intern', org: 'Apple', country: 'US', type: 'intern', degree: 'master', match: 87, req: '产品思维, 沟通能力, 技术背景', period: 'term', remote: 'onsite', tags: ['苹果', '产品', '科技'], url: 'https://jobs.apple.com/', major: 'biz' },
+  { id: 32, title: 'Product Management Intern', org: 'Google', country: 'US', type: 'intern', degree: 'bachelor', match: 89, req: '产品设计, 用户研究, 数据分析', period: 'vacation', remote: 'onsite', tags: ['谷歌', '产品', '实习'], url: 'https://careers.google.com/students/', major: 'biz' },
+  { id: 33, title: 'Strategy Consultant Intern', org: 'McKinsey', country: 'US', type: 'intern', degree: 'master', match: 91, req: '商业分析, 案例研究, 沟通', period: 'vacation', remote: 'onsite', tags: ['麦肯锡', '咨询', '实习'], url: 'https://www.mckinsey.com/careers', major: 'biz' },
+  { id: 34, title: 'Business Analyst', org: 'Cambridge Judge', country: 'UK', type: 'research', degree: 'master', match: 88, req: '商业分析, 战略咨询', period: 'term', remote: 'onsite', tags: ['剑桥', '商科', '科研'], url: 'https://www.jbs.cam.ac.uk/', major: 'biz' },
+  { id: 35, title: 'Management Trainee', org: 'HSBC', country: 'UK', type: 'school', degree: 'bachelor', match: 84, req: '银行管理, 领导力, 英语', period: 'term', remote: 'onsite', tags: ['汇丰', '管培', '银行'], url: 'https://www.hsbc.com/careers/', major: 'biz' },
+  { id: 36, title: 'Graduate Program', org: 'Toyota', country: 'JP', type: 'school', degree: 'master', match: 82, req: '汽车工程, 日语N2, 创新思维', period: 'term', remote: 'onsite', tags: ['丰田', '汽车', '管培'], url: 'https://toyota.recruitment.jp/en/', major: 'biz' },
+  { id: 37, title: 'Business Development', org: 'Deloitte', country: 'CN', type: 'intern', degree: 'master', match: 85, req: '咨询, 客户开发, PPT', period: 'vacation', remote: 'onsite', tags: ['德勤', '咨询', '实习'], url: 'https://www2.deloitte.com/cn/zh/careers.html', major: 'biz' },
+  { id: 38, title: 'Product Manager', org: 'ByteDance', country: 'CN', type: 'intern', degree: 'master', match: 88, req: '产品设计, 短视频, 数据分析', period: 'term', remote: 'onsite', tags: ['字节', '产品', '实习'], url: 'https://job.bytedance.com/campus/', major: 'biz' },
+  { id: 39, title: 'Startup Incubator', org: 'YC', country: 'US', type: 'school', degree: 'bachelor', match: 80, req: '创业想法, 技术能力, 团队协作', period: 'vacation', remote: 'onsite', tags: ['YC', '创业', '孵化'], url: 'https://www.ycombinator.com/apply/', major: 'biz' },
+  { id: 40, title: 'Innovation Project', org: 'Siemens', country: 'DE', type: 'intern', degree: 'master', match: 81, req: '工业4.0, 创新项目', period: 'term', remote: 'onsite', tags: ['西门子', '工业', '实习'], url: 'https://www.siemens.com/careers', major: 'biz' },
+  
+  // ===== 经济 (econ) =====
+  { id: 41, title: 'Economic Research Assistant', org: 'Harvard', country: 'US', type: 'research', degree: 'master', match: 94, req: '经济学, 计量模型, 论文写作', period: 'term', remote: 'onsite', tags: ['哈佛', '经济', '科研'], url: 'https://www.harvard.edu/admissions/', major: 'econ' },
+  { id: 42, title: 'Economics Intern', org: 'IMF', country: 'US', type: 'intern', degree: 'master', match: 91, req: '宏观经济学, 数据分析, 英语', period: 'vacation', remote: 'onsite', tags: ['IMF', '经济', '国际组织'], url: 'https://www.imf.org/careers', major: 'econ' },
+  { id: 43, title: 'Research Associate', org: 'LSE', country: 'UK', type: 'research', degree: 'master', match: 90, req: '经济研究, 计量, 政策分析', period: 'term', remote: 'onsite', tags: ['LSE', '经济', '科研'], url: 'https://www.lse.ac.uk/study-at-lse', major: 'econ' },
+  { id: 44, title: 'Economic Analyst', org: 'World Bank', country: 'US', type: 'intern', degree: 'master', match: 89, req: '发展经济学, 政策研究', period: 'term', remote: 'onsite', tags: ['世界银行', '发展', '国际'], url: 'https://www.worldbank.org/careers', major: 'econ' },
+  { id: 45, title: 'Economics Intern', org: 'Central Bank', country: 'CN', type: 'intern', degree: 'master', match: 86, req: '货币政策, 金融监管', period: 'vacation', remote: 'onsite', tags: ['央行', '政策', '实习'], url: 'https://www.pbc.gov.cn/', major: 'econ' },
+  
+  // ===== 电子/电气 (ee) =====
+  { id: 46, title: 'Quantum Computing Research', org: 'IBM Research', country: 'US', type: 'research', degree: 'master', match: 89, req: '量子计算, Python, 物理背景', period: 'term', remote: 'onsite', tags: ['IBM', '量子', '科研'], url: 'https://www.ibm.com/careers', major: 'ee' },
+  { id: 47, title: 'Hardware Engineer Intern', org: 'Apple', country: 'US', type: 'intern', degree: 'master', match: 88, req: '电路设计, 硬件调试', period: 'term', remote: 'onsite', tags: ['苹果', '硬件', '实习'], url: 'https://jobs.apple.com/', major: 'ee' },
+  { id: 48, title: 'Electrical Engineering Intern', org: 'Tesla', country: 'US', type: 'intern', degree: 'bachelor', match: 87, req: '电力电子, 电动车, MATLAB', period: 'vacation', remote: 'onsite', tags: ['特斯拉', '电动车', '实习'], url: 'https://www.tesla.com/careers', major: 'ee' },
+  { id: 49, title: 'Semiconductor Research', org: 'TU Munich', country: 'DE', type: 'research', degree: 'master', match: 86, req: '半导体, 集成电路, 德语', period: 'term', remote: 'onsite', tags: ['慕尼黑工大', '芯片', '科研'], url: 'https://www.tum.de/', major: 'ee' },
+  { id: 50, title: 'EE Intern', org: 'Sony', country: 'JP', type: 'intern', degree: 'bachelor', match: 82, req: '电子电路, 嵌入式, 日语', period: 'term', remote: 'onsite', tags: ['索尼', '电子', '实习'], url: 'https://www.sony.co.jp/careers/', major: 'ee' },
+  { id: 51, title: 'Robotics Engineer', org: 'SoftBank', country: 'JP', type: 'intern', degree: 'master', match: 84, req: '机器人, Python, AI', period: 'vacation', remote: 'onsite', tags: ['软银', '机器人', '实习'], url: 'https://www.softbank.jp/en/careers/', major: 'ee' },
+  
+  // ===== 机械/自动化 (me) =====
+  { id: 52, title: 'Engineering Internship', org: 'BMW', country: 'DE', type: 'intern', degree: 'master', match: 83, req: '机械工程, 德语B2', period: 'term', remote: 'onsite', tags: ['宝马', '汽车', '工程'], url: 'https://www.bmwgroup.com/career', major: 'me' },
+  { id: 53, title: 'Robotics Engineering Intern', org: 'Boston Dynamics', country: 'US', type: 'intern', degree: 'master', match: 90, req: '机器人, C++, 机械设计', period: 'term', remote: 'onsite', tags: ['波士顿动力', '机器人', '实习'], url: 'https://bostondynamics.com/careers/', major: 'me' },
+  { id: 54, title: 'Mechanical Engineer Intern', org: 'Dyson', country: 'UK', type: 'intern', degree: 'master', match: 85, req: '机械设计, CAD, 产品开发', period: 'term', remote: 'onsite', tags: ['戴森', '机械', '实习'], url: 'https://www.dyson.com/careers', major: 'me' },
+  { id: 55, title: 'Automotive Engineering', org: 'University of Stuttgart', country: 'DE', type: 'research', degree: 'master', match: 84, req: '汽车工程, 仿真, 德国', period: 'term', remote: 'onsite', tags: ['斯图加特', '汽车', '科研'], url: 'https://www.uni-stuttgart.de/', major: 'me' },
+  { id: 56, title: 'Manufacturing Intern', org: 'Foxconn', country: 'CN', type: 'intern', degree: 'bachelor', match: 78, req: '制造业, 精益生产', period: 'vacation', remote: 'onsite', tags: ['富士康', '制造', '实习'], url: 'https://www.foxconn.com/', major: 'me' },
+  
+  // ===== 生物/医学 (bio) =====
+  { id: 57, title: 'Biomedical Research', org: 'Johns Hopkins', country: 'US', type: 'research', degree: 'master', match: 93, req: '生物医学, 实验技术, 论文', period: 'term', remote: 'onsite', tags: ['约翰霍普金斯', '医学', '科研'], url: 'https://www.jhu.edu/', major: 'bio' },
+  { id: 58, title: 'Pharma Intern', org: 'Pfizer', country: 'US', type: 'intern', degree: 'master', match: 87, req: '药物研发, 生物实验', period: 'term', remote: 'onsite', tags: ['辉瑞', '制药', '实习'], url: 'https://www.pfizer.com/careers', major: 'bio' },
+  { id: 59, title: 'Biotech Research', org: 'Oxford', country: 'UK', type: 'research', degree: 'master', match: 91, req: '生物技术, 基因编辑', period: 'term', remote: 'onsite', tags: ['牛津', '生物', '科研'], url: 'https://www.ox.ac.uk/admissions/graduate', major: 'bio' },
+  { id: 60, title: 'Healthcare Analyst', org: 'Nestle Health', country: 'CH', type: 'intern', degree: 'master', match: 82, req: '营养健康, 数据分析', period: 'term', remote: 'onsite', tags: ['雀巢', '健康', '实习'], url: 'https://www.nestle.com/careers', major: 'bio' },
+];
+
+var experiencesData = [
+  { name: '张同学', major: '计算机', school: 'Stanford', content: '通过留学规划平台的推荐，我成功获得了斯坦福AI实验室的科研机会。申请过程很顺畅，导师非常专业。' },
+  { name: '李同学', major: '金融', school: 'Goldman Sachs', content: '在高盛实习的几个月，我学到了很多课堂上无法接触到的实务技能。感谢平台的精准匹配！' },
+  { name: '王同学', major: '数据科学', school: 'Google', content: 'Google的实习经历让我对数据科学有了更深的理解。面试准备很有针对性。' },
+];
+
+// 渲染推荐
+function renderOpportunities(ops) {
+  var grid = document.getElementById('recommendGrid');
+  document.getElementById('resultCount').textContent = ops.length + '个机会';
+  
+  if(ops.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(232,240,254,0.4);">暂无匹配机会，请调整筛选条件</div>';
+    return;
+  }
+  
+  var html = '';
+  ops.forEach(function(op) {
+    var badgeClass = op.type === 'research' ? 'badge-research' : (op.type === 'intern' ? 'badge-intern' : 'badge-school');
+    var badgeText = op.type === 'research' ? '🔬 科研' : (op.type === 'intern' ? '🏢 实习' : '🏫 校企');
+    var matchClass = op.match >= 90 ? 'match-high' : (op.match >= 75 ? 'match-mid' : 'match-low');
+    var matchText = op.match >= 90 ? '高匹配' : (op.match >= 75 ? '中匹配' : '一般');
+    
+    html += '<div class="opportunity-card" onclick="window.open(\'' + op.url + '\', \'_blank\')">' +
+      '<div class="opp-card-header">' +
+        '<span class="opp-badge ' + badgeClass + '">' + badgeText + '</span>' +
+        '<h4 class="opp-card-title">' + op.org + '</h4>' +
+        '<span class="opp-card-match ' + matchClass + '">' + matchText + '</span>' +
+      '</div>' +
+      '<div class="opp-card-org">📍 ' + (op.country === 'US' ? '美国' : op.country === 'UK' ? '英国' : op.country === 'DE' ? '德国' : op.country === 'SE' ? '瑞典' : op.country === 'SG' ? '新加坡' : op.country === 'JP' ? '日本' : '中国') + ' · ' + op.period + '</div>' +
+      '<div class="opp-card-req"><strong>要求：</strong>' + op.req + '</div>' +
+      '<div class="opp-card-footer">' +
+        '<div class="opp-card-tags">' + op.tags.map(function(t){return '<span class="opp-tag">'+t+'</span>';}).join('') + '</div>' +
+        '<button class="opp-save-btn" onclick="event.stopPropagation();toggleSave('+op.id+')">❤️</button>' +
+      '</div>' +
+    '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+// 渲染经验
+function renderExperiences() {
+  var grid = document.getElementById('expGrid');
+  var html = '';
+  experiencesData.forEach(function(exp) {
+    var initial = exp.name.charAt(0);
+    html += '<div class="exp-card">' +
+      '<div class="exp-header">' +
+        '<div class="exp-avatar">' + initial + '</div>' +
+        '<div class="exp-info">' +
+          '<h4>' + exp.name + '</h4>' +
+          '<p>' + exp.major + ' · ' + exp.school + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="exp-content">' + exp.content + '</div>' +
+    '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+  // 智能推荐
+function doRecommend() {
+  var major = document.getElementById('fMajor').value;
+  var country = document.getElementById('fCountry').value;
+  var periodEl = document.querySelector('input[name="fPeriod"]:checked');
+  var period = periodEl ? periodEl.value : 'all';
+  var type = document.getElementById('fType').value;
+  var degree = document.getElementById('fDegree').value;
+  var remote = document.getElementById('fRemote').value;
+  
+  var filtered = opportunitiesData.filter(function(op) {
+    if(major && op.major !== major) return false;
+    if(country && op.country !== country) return false;
+    if(period !== 'all' && op.period !== period) return false;
+    if(type && op.type !== type) return false;
+    if(degree && op.degree !== degree) return false;
+    if(remote && op.remote !== remote) return false;
+    return true;
+  });
+  
+  renderOpportunities(filtered);
+}
+
+// 实时筛选 - 选择后自动更新
+function setupRealTimeFilter() {
+  var fMajor = document.getElementById('fMajor');
+  var fCountry = document.getElementById('fCountry');
+  var fType = document.getElementById('fType');
+  var fDegree = document.getElementById('fDegree');
+  var fRemote = document.getElementById('fRemote');
+  
+  var filters = [fMajor, fCountry, fType, fDegree, fRemote];
+  filters.forEach(function(el) {
+    if(el) {
+      el.addEventListener('change', doRecommend);
+    }
+  });
+  
+  // 时间周期radio选择后自动更新
+  document.querySelectorAll('input[name="fPeriod"]').forEach(function(radio) {
+    radio.addEventListener('change', doRecommend);
+  });
+}
+
+// 重置
+function resetFilters() {
+  document.getElementById('fMajor').value = '';
+  document.getElementById('fCountry').value = '';
+  document.querySelector('input[name="fPeriod"][value="all"]').checked = true;
+  document.getElementById('fType').value = '';
+  document.getElementById('fDegree').value = '';
+  document.getElementById('fRemote').value = '';
+  renderOpportunities(opportunitiesData);
+}
+
+// 弹窗
+function openModal(id) {
+  var op = opportunitiesData.find(function(o){return o.id === id;});
+  if(!op) return;
+  
+  var content = '<h3 style="color:#fff;font-size:20px;margin-bottom:16px;">' + op.title + '</h3>' +
+    '<p style="color:rgba(232,240,254,0.7);margin-bottom:12px;">🏢 ' + op.org + ' | 📍 ' + (op.country === 'US' ? '美国' : '英国') + '</p>' +
+    '<p style="color:rgba(232,240,254,0.6);line-height:1.8;">' + op.req + '</p>';
+  
+  document.getElementById('modalContent').innerHTML = content;
+  document.getElementById('internModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('internModal').classList.remove('show');
+}
+
+// 收藏
+function toggleSave(id) {
+  alert('已收藏机会 #' + id);
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+  renderOpportunities(opportunitiesData);
+  renderExperiences();
+  setupRealTimeFilter();
+  
+  // 院校卡片点击事件
+  document.querySelectorAll('.school-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var school = this.getAttribute('data-school');
+      openStreetviewModal(school);
+    });
+  });
+  
+  // 3D实景标签切换
+  document.querySelectorAll('.streetview-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var scene = this.getAttribute('data-scene');
+      switchStreetviewScene(scene);
+    });
+  });
+});
+
+// 打开3D实景弹窗
+function openStreetviewModal(school) {
+  document.getElementById('streetview-modal').classList.add('show');
+  switchStreetviewScene(school);
+}
+
+// 关闭3D实景弹窗
+function closeStreetviewModal() {
+  document.getElementById('streetview-modal').classList.remove('show');
+}
+
+// 切换实景场景
+function switchStreetviewScene(sceneId) {
+  document.querySelectorAll('.streetview-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.streetview-scene').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelector('.streetview-tab[data-scene="' + sceneId + '"]').classList.add('active');
+  document.getElementById(sceneId).classList.add('active');
+}
+
+// 点击弹窗背景关闭
+document.getElementById('streetview-modal').addEventListener('click', function(e) {
+  if(e.target === this) closeStreetviewModal();
+});
+</script>
+</body>
+</html>

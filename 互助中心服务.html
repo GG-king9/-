@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>互助中心服务 - 留学规划</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="留学互助中心，留学生经验分享与交流" />
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#165DFF', accent: '#36D399', green: '#99BF38', blue: '#2FADDE', dark: '#0d1b2a', glass: 'rgba(255,255,255,0.08)',
+        },
+        fontFamily: { sans: ['"Noto Sans SC"', 'Inter', 'system-ui', 'sans-serif'] },
+        animation: { 'float': 'float 4s ease-in-out infinite', 'glow': 'glow 2s ease-in-out infinite' },
+        keyframes: {
+          float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+          glow: { '0%,100%': { boxShadow: '0 0 20px rgba(54,211,153,0.3)' }, '50%': { boxShadow: '0 0 40px rgba(54,211,153,0.7)' } },
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+/* ===== 全局重置 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
+  background: #0d1b2a;
+  color: #e8f0fe;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 背景粒子效果 ===== */
+.bg-orb {
+  position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
+}
+.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #165DFF 0%, transparent 70%); top: -10%; left: -10%; animation: float 8s ease-in-out infinite; opacity: 0.35; }
+.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, #36D399 0%, transparent 70%); bottom: 5%; right: -5%; animation: float 10s ease-in-out infinite 2s; opacity: 0.25; }
+.orb3 { width: 300px; height: 300px; background: radial-gradient(circle, #99BF38 0%, transparent 70%); top: 40%; left: 40%; animation: float 7s ease-in-out infinite 4s; opacity: 0.15; }
+
+@keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+
+/* ===== 主内容层 ===== */
+#app { position: relative; z-index: 1; }
+
+/* ===== 导航栏 ===== */
+#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: all 0.4s ease; padding: 0; }
+#navbar.scrolled { background: rgba(13,27,42,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(54,211,153,0.15); box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+.nav-inner { max-width: 1400px; margin: 0 auto; padding: 0 28px; height: 68px; display: flex; align-items: center; gap: 0; }
+.nav-inner .nav-links { flex: 1; justify-content: center; }
+.nav-right-group { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.nav-contact-inline { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; border-left: 1px solid rgba(54,211,153,0.2); padding-left: 16px; margin-left: 4px; }
+.nav-contact-inline .nc-phone { font-size: 11.5px; font-weight: 600; color: rgba(232,240,254,0.85); letter-spacing: 0.2px; white-space: nowrap; }
+.nav-contact-inline .nc-email { font-size: 12.5px; font-weight: 500; color: #36D399; text-decoration: none; white-space: nowrap; letter-spacing: 0.55px; }
+.nav-contact-inline .nc-email:hover { opacity: 0.75; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-globe-new { width: 40px; height: 40px; background: linear-gradient(135deg, #99BF38, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 20px rgba(153,191,56,0.4); animation: glow 3s ease-in-out infinite; }
+.logo-texts { display: flex; flex-direction: column; line-height: 1.2; }
+.logo-title-new { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+.logo-title-new span { color: #36D399; }
+.logo-sub-new { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; }
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link { padding: 7px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; color: rgba(232,240,254,0.8); text-decoration: none; transition: all 0.25s ease; border: 1px solid transparent; }
+.nav-link:hover { background: rgba(54,211,153,0.1); border-color: rgba(54,211,153,0.3); color: #36D399; }
+.nav-link.active { background: linear-gradient(135deg, rgba(22,93,255,0.3), rgba(54,211,153,0.2)); border-color: rgba(54,211,153,0.4); color: #fff; }
+.nav-cta { padding: 9px 22px; background: linear-gradient(135deg, #165DFF, #36D399); border-radius: 24px; font-size: 14px; font-weight: 700; color: #fff; text-decoration: none; cursor: pointer; border: none; box-shadow: 0 4px 20px rgba(22,93,255,0.4); transition: all 0.3s ease; }
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(22,93,255,0.55); }
+
+/* ===== 页面标题区 ===== */
+.page-header { padding: 140px 32px 60px; text-align: center; position: relative; }
+.page-header::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(22,93,255,0.1) 0%, transparent 100%); }
+.page-title { font-size: clamp(32px, 5vw, 56px); font-weight: 900; color: #fff; margin-bottom: 16px; position: relative; }
+.page-title span { background: linear-gradient(135deg, #36D399, #2FADDE); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.page-subtitle { font-size: 16px; color: rgba(232,240,254,0.6); max-width: 600px; margin: 0 auto; position: relative; }
+
+/* ===== 服务卡片区 ===== */
+.services-section { padding: 60px 32px; max-width: 1280px; margin: 0 auto; }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+.service-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 32px; transition: all 0.4s cubic-bezier(.34,1.56,.64,1); }
+.service-card:hover { transform: translateY(-8px); border-color: rgba(54,211,153,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(54,211,153,0.1); }
+.service-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; }
+.service-card h3 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+.service-card p { font-size: 14px; color: rgba(232,240,254,0.6); line-height: 1.7; }
+
+/* ===== 导师介绍 ===== */
+.mentors-section { padding: 60px 32px; max-width: 1280px; margin: 0 auto; }
+.section-badge { display: inline-block; background: rgba(54,211,153,0.1); border: 1px solid rgba(54,211,153,0.3); border-radius: 20px; padding: 5px 16px; font-size: 12px; font-weight: 600; color: #36D399; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
+.mentors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
+.mentor-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; display: flex; gap: 16px; transition: all 0.3s; }
+.mentor-card:hover { border-color: rgba(54,211,153,0.2); transform: translateY(-4px); }
+.mentor-icon { width: 48px; height: 48px; background: linear-gradient(135deg, #36D399, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.mentor-info h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.mentor-info p { font-size: 13px; color: rgba(232,240,254,0.55); line-height: 1.6; }
+
+/* ===== 评论区 ===== */
+.comments-section { padding: 60px 32px; max-width: 900px; margin: 0 auto; }
+.comment-box { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; margin-bottom: 32px; }
+.comment-box input, .comment-box textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; color: #e8f0fe; font-size: 14px; margin-bottom: 12px; transition: all 0.3s; }
+.comment-box input:focus, .comment-box textarea:focus { outline: none; border-color: #36D399; box-shadow: 0 0 0 3px rgba(54,211,153,0.1); }
+.comment-box textarea { min-height: 100px; resize: vertical; }
+.comment-box button { background: linear-gradient(135deg, #165DFF, #36D399); color: #fff; border: none; padding: 12px 28px; border-radius: 24px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+.comment-box button:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(22,93,255,0.4); }
+.comments-list { display: flex; flex-direction: column; gap: 16px; }
+.comment-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; transition: all 0.3s; cursor: pointer; }
+.comment-item:hover { border-color: rgba(54,211,153,0.15); }
+.comment-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.comment-author { display: flex; align-items: center; gap: 10px; }
+.comment-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #36D399, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; }
+.comment-name { font-weight: 600; color: #fff; }
+.comment-time { font-size: 12px; color: rgba(232,240,254,0.4); }
+.comment-body { color: rgba(232,240,254,0.75); line-height: 1.7; font-size: 14px; padding-left: 50px; }
+.reply-btn { display: inline-block; padding: 6px 14px; background: rgba(54,211,153,0.1); color: #36D399; border-radius: 16px; font-size: 12px; margin-top: 10px; margin-left: 50px; }
+.replies { margin-top: 16px; padding-left: 50px; border-left: 2px solid rgba(54,211,153,0.2); }
+.reply-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+
+/* ===== 页脚 ===== */
+footer { background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08); padding: 60px 32px 0; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
+.footer-brand .logo-globe-new { width: 36px; height: 36px; font-size: 16px; }
+.footer-desc { font-size: 13px; color: rgba(232,240,254,0.5); line-height: 1.8; margin-top: 14px; max-width: 280px; }
+.footer-col h6 { font-size: 13px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { font-size: 13px; color: rgba(232,240,254,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: #36D399; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding: 20px 0; max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: rgba(232,240,254,0.3); }
+.footer-social { display: flex; gap: 10px; }
+.footer-social a { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 13px; color: rgba(232,240,254,0.5); text-decoration: none; transition: all 0.25s; }
+.footer-social a:hover { background: rgba(54,211,153,0.15); border-color: rgba(54,211,153,0.4); color: #36D399; }
+
+/* ===== 回复弹窗 ===== */
+#reply-modal { display: none; position: fixed; inset: 0; background: rgba(8,16,28,0.8); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; }
+#reply-modal.show { display: flex; }
+.reply-modal-content { background: rgba(18,32,52,0.98); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 28px; width: 90%; max-width: 480px; }
+.reply-modal-content h4 { color: #fff; font-size: 18px; margin-bottom: 20px; }
+.reply-modal-content h4 span { color: #36D399; }
+.reply-modal-content textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px; color: #e8f0fe; font-size: 14px; min-height: 100px; margin-bottom: 16px; }
+.reply-modal-buttons { display: flex; gap: 12px; justify-content: flex-end; }
+.reply-modal-buttons button { padding: 10px 22px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+.btn-cancel { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(232,240,254,0.7); }
+.btn-cancel:hover { border-color: rgba(255,255,255,0.4); }
+.btn-submit { background: linear-gradient(135deg, #36D399, #2FADDE); border: none; color: #fff; }
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(54,211,153,0.4); }
+
+/* 响应式 */
+@media (max-width: 1024px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .nav-contact-inline { display: none; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .page-header { padding: 120px 20px 40px; }
+  .services-section, .mentors-section, .comments-section { padding: 40px 20px; }
+}
+</style>
+</head>
+<body>
+<!-- 背景光晕 -->
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<div id="app">
+<!-- ===== 导航栏 ===== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-globe-new">🎓</div>
+      <div class="logo-texts">
+        <div class="logo-title-new">留学<span>规划</span></div>
+        <div class="logo-sub-new">One-Stop Solution</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">主页</a>
+      <a href="在线云校验.html" class="nav-link">在线云校验</a>
+      <a href="互助中心服务.html" class="nav-link active">互助中心</a>
+      <a href="世界机会自选.html" class="nav-link">院校机遇一览</a>
+      <a href="智能留学规划.html" class="nav-link">智能留学规划</a>
+    </div>
+    <div class="nav-right-group">
+      <a href="#" class="nav-cta" onclick="document.getElementById('modal-overlay').classList.add('open'); return false;">立即AI测评</a>
+      <div class="nav-contact-inline">
+        <span class="nc-phone">020-37512006</span>
+        <a href="mailto:zjxybgs@scauzj.edu.cn" class="nc-email">zjxybgs@scauzj.edu.cn</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== 页面标题 ===== -->
+<header class="page-header">
+  <h1 class="page-title">互助<span>中心</span></h1>
+  <p class="page-subtitle">汇聚留学生经验与智慧，搭建信息互通的交流平台</p>
+</header>
+
+<!-- ===== 服务展示区 ===== -->
+<section class="services-section">
+  <div class="services-grid">
+    <div class="service-card">
+      <img src="img/service1.jpg" alt="学生案例">
+      <h3>李洋垟</h3>
+      <p>戏剧影视美术设计2108国际班学生。曾任国际青年交流协会负责人，斩获国家奖学金、校级优秀毕业生等荣誉。已收到伦敦大学学院、爱丁堡大学、诺丁汉大学、约克大学、澳门科技大学等多所知名学府录取offer。</p>
+    </div>
+    <div class="service-card">
+      <img src="img/service2.jpg" alt="学生案例">
+      <h3>邱迅</h3>
+      <p>华南农业大学珠江学院国际传播学院广播电视编导2101班学生，中共党员。获得澳门大学（QS排名245）、香港教育大学（教育学科全球排名12）、澳门科技大学录取通知。</p>
+    </div>
+    <div class="service-card">
+      <img src="img/service3.jpg" alt="学生案例">
+      <h3>盛熙晨</h3>
+      <p>艺术设计学院戏剧影视美术设计2110班。获校内党史故事比赛一等奖、学院"优秀班干部"等荣誉。已获得悉尼大学、悉尼科技大学、莫纳什大学、皇家墨尔本大学等知名学府升学录取offer。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 导师介绍 ===== -->
+<section class="mentors-section">
+  <div class="section-badge">专家导师团队</div>
+  <div class="mentors-grid">
+    <div class="mentor-card">
+      <div class="mentor-icon">🎭</div>
+      <div class="mentor-info">
+        <h4>庚钟银</h4>
+        <p>教授，现任大湾区影视学院院长、辽宁省电影家协会主席、中国高等学校影视学会常务理事等。</p>
+      </div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-icon">📐</div>
+      <div class="mentor-info">
+        <h4>张广</h4>
+        <p>二级教授，国家自然基金委通讯评审专家、教育部学位办学位论文评审专家，主要从事微分方程及动力系统研究。</p>
+      </div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-icon">💡</div>
+      <div class="mentor-info">
+        <h4>刘万华</h4>
+        <p>教授，学报、期刊审稿专家、广东省职业技能等级认定试题开发评审专家、广州市科技局管理类专家。</p>
+      </div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-icon">📚</div>
+      <div class="mentor-info">
+        <h4>朱颖华</h4>
+        <p>二级教授，全国高校思想政治理论课教师影响力提名，全国职业院校思政课百名名师。</p>
+      </div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-icon">🎨</div>
+      <div class="mentor-info">
+        <h4>张彬</h4>
+        <p>教授，中国印刷技术协会创意设计专业委员会主任委员，中国职业技术教育学会常务理事，艺术设计学院副院长。</p>
+      </div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-icon">🎬</div>
+      <div class="mentor-info">
+        <h4>董从斌</h4>
+        <p>全国普通高等学校本科教育教学评估专家，国家社科评审专家，中国短视频协会理事。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 评论区 ===== -->
+<section class="comments-section">
+  <div class="section-badge">在线咨询</div>
+  
+  <!-- 评论输入 -->
+  <div class="comment-box">
+    <input type="text" id="comment-author" placeholder="请输入您的昵称">
+    <textarea id="comment-content" placeholder="请输入您的评论内容..."></textarea>
+    <button onclick="submitComment()">提交评论</button>
+  </div>
+  
+  <!-- 评论列表 -->
+  <div class="comments-list" id="comments-list">
+    <div class="no-comments" style="text-align: center; padding: 40px; color: rgba(232,240,254,0.4);">暂无评论，快来发表第一条评论吧！</div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-globe-new">🎓</div>
+        <div class="logo-texts">
+          <div class="logo-title-new" style="font-size:16px;">留学<span>规划</span></div>
+          <div class="logo-sub-new">One-Stop Solution</div>
+        </div>
+      </a>
+      <p class="footer-desc">一站式专业留学服务平台，AI智能测评精准匹配最适合你的留学方向，全程专业护航。</p>
+      <p class="footer-desc" style="margin-top:10px;">📞 020-37512006 / 020-87990713<br>✉ zjxybgs@scauzj.edu.cn<br>📍 华南农业大学珠江学院行政楼1-101</p>
+    </div>
+    <div class="footer-col">
+      <h6>快速导航</h6>
+      <ul>
+        <li><a href="index.html">主页</a></li>
+        <li><a href="在线云校验.html">在线云校验</a></li>
+        <li><a href="互助中心服务.html">互助中心</a></li>
+        <li><a href="世界机会自选.html">院校机遇一览</a></li>
+        <li><a href="智能留学规划.html">智能留学规划</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>热门目的地</h6>
+      <ul>
+        <li><a href="#">英国留学</a></li>
+        <li><a href="#">澳大利亚留学</a></li>
+        <li><a href="#">新加坡留学</a></li>
+        <li><a href="#">加拿大留学</a></li>
+        <li><a href="#">美国留学</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>服务支持</h6>
+      <ul>
+        <li><a href="#">常见问题</a></li>
+        <li><a href="#">申请指南</a></li>
+        <li><a href="#">联系我们</a></li>
+        <li><a href="#">隐私政策</a></li>
+        <li><a href="#">服务条款</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 留学规划. All rights reserved. 华南农业大学珠江学院</span>
+    <div class="footer-social">
+      <a href="#" title="微信">💬</a>
+      <a href="#" title="微博">📱</a>
+      <a href="#" title="QQ">🐧</a>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- ===== 回复弹窗 ===== -->
+<div id="reply-modal">
+  <div class="reply-modal-content">
+    <h4>回复: <span id="reply-to-author"></span></h4>
+    <textarea id="reply-content" placeholder="请输入您的回复内容..."></textarea>
+    <div class="reply-modal-buttons">
+      <button class="btn-cancel" onclick="closeReplyModal()">取消</button>
+      <button class="btn-submit" onclick="submitReply()">提交回复</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 导航栏滚动效果
+window.addEventListener('scroll', function() {
+  var navbar = document.getElementById('navbar');
+  if(window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+// 评论系统逻辑（保留原有功能）
+var currentReplyId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadComments();
+});
+
+function submitComment() {
+  var author = document.getElementById('comment-author').value.trim();
+  var content = document.getElementById('comment-content').value.trim();
+  
+  if(!author) { alert('请输入您的昵称！'); return; }
+  if(!content) { alert('请输入评论内容！'); return; }
+
+  var comment = {
+    id: Date.now(),
+    author: author,
+    content: content,
+    time: new Date().toLocaleString('zh-CN', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'}),
+    replies: []
+  };
+
+  var comments = JSON.parse(localStorage.getItem('huzhu_comments') || '[]');
+  comments.unshift(comment);
+  localStorage.setItem('huzhu_comments', JSON.stringify(comments));
+
+  document.getElementById('comment-author').value = '';
+  document.getElementById('comment-content').value = '';
+  loadComments();
+}
+
+function loadComments() {
+  var comments = JSON.parse(localStorage.getItem('huzhu_comments') || '[]');
+  var list = document.getElementById('comments-list');
+  
+  if(comments.length === 0) {
+    list.innerHTML = '<div class="no-comments" style="text-align: center; padding: 40px; color: rgba(232,240,254,0.4);">暂无评论，快来发表第一条评论吧！</div>';
+    return;
+  }
+
+  var html = '';
+  comments.forEach(function(comment) {
+    var initial = comment.author.charAt(0).toUpperCase();
+    var repliesHtml = '';
+    
+    if(comment.replies && comment.replies.length > 0) {
+      repliesHtml = '<div class="replies">';
+      comment.replies.forEach(function(reply) {
+        var replyInitial = reply.author.charAt(0).toUpperCase();
+        repliesHtml += '<div class="reply-item">' +
+          '<div class="comment-header">' +
+            '<div class="comment-author">' +
+              '<div class="comment-avatar" style="background:linear-gradient(135deg,#ff6b6b,#ee5a5a);">' + replyInitial + '</div>' +
+              '<span class="comment-name">' + escapeHtml(reply.author) + '</span>' +
+              '<span style="background:linear-gradient(135deg,#ff6b6b,#ee5a5a);padding:2px 8px;border-radius:10px;font-size:10px;margin-left:8px;">官方回复</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="color:rgba(232,240,254,0.7);font-size:13px;line-height:1.6;">' + escapeHtml(reply.content) + '</div>' +
+          '<div class="comment-time" style="margin-top:6px;">' + reply.time + '</div>' +
+        '</div>';
+      });
+      repliesHtml += '</div>';
+    }
+
+    html += '<div class="comment-item" onclick="openReplyModal(' + comment.id + ', \'' + escapeHtml(comment.author) + '\')">' +
+      '<div class="comment-header">' +
+        '<div class="comment-author">' +
+          '<div class="comment-avatar">' + initial + '</div>' +
+          '<span class="comment-name">' + escapeHtml(comment.author) + '</span>' +
+        '</div>' +
+        '<span style="color:#36D399;font-size:12px;">点击回复 ▼</span>' +
+      '</div>' +
+      '<div class="comment-body">' + escapeHtml(comment.content) + '</div>' +
+      '<div class="comment-time">' + comment.time + '</div>' +
+      repliesHtml +
+    '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function openReplyModal(commentId, authorName) {
+  currentReplyId = commentId;
+  document.getElementById('reply-to-author').textContent = authorName;
+  document.getElementById('reply-content').value = '';
+  document.getElementById('reply-modal').classList.add('show');
+}
+
+function closeReplyModal() {
+  document.getElementById('reply-modal').classList.remove('show');
+  currentReplyId = null;
+}
+
+function submitReply() {
+  var replyContent = document.getElementById('reply-content').value.trim();
+  if(!replyContent) { alert('请输入回复内容！'); return; }
+
+  var comments = JSON.parse(localStorage.getItem('huzhu_comments') || '[]');
+  for(var i = 0; i < comments.length; i++) {
+    if(comments[i].id === currentReplyId) {
+      if(!comments[i].replies) comments[i].replies = [];
+      comments[i].replies.push({
+        author: '官方客服',
+        content: replyContent,
+        time: new Date().toLocaleString('zh-CN', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'})
+      });
+      break;
+    }
+  }
+  localStorage.setItem('huzhu_comments', JSON.stringify(comments));
+  closeReplyModal();
+  loadComments();
+}
+
+document.getElementById('reply-modal').addEventListener('click', function(e) {
+  if(e.target === this) closeReplyModal();
+});
+
+function escapeHtml(text) {
+  var map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039'};
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+</script>
+</body>
+</html>

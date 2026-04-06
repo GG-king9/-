@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>智能留学规划 - 留学规划</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="AI智能留学规划，一对一精准匹配最优留学方案" />
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { primary: '#165DFF', accent: '#36D399', green: '#99BF38', blue: '#2FADDE', dark: '#0d1b2a', glass: 'rgba(255,255,255,0.08)' },
+        fontFamily: { sans: ['"Noto Sans SC"', 'Inter', 'system-ui', 'sans-serif'] },
+        animation: { 'float': 'float 4s ease-in-out infinite', 'glow': 'glow 2s ease-in-out infinite', 'pulse': 'pulse 2s ease-in-out infinite' },
+        keyframes: {
+          float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+          glow: { '0%,100%': { boxShadow: '0 0 20px rgba(54,211,153,0.3)' }, '50%': { boxShadow: '0 0 40px rgba(54,211,153,0.7)' } },
+          pulse: { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.5 } },
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+/* ===== 全局重置 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif; background: #0d1b2a; color: #e8f0fe; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+/* ===== 背景 ===== */
+.bg-orb { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
+.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #165DFF 0%, transparent 70%); top: -10%; left: -10%; animation: float 8s ease-in-out infinite; opacity: 0.35; }
+.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, #36D399 0%, transparent 70%); bottom: 5%; right: -5%; animation: float 10s ease-in-out infinite 2s; opacity: 0.25; }
+.orb3 { width: 300px; height: 300px; background: radial-gradient(circle, #99BF38 0%, transparent 70%); top: 40%; left: 40%; animation: float 7s ease-in-out infinite 4s; opacity: 0.15; }
+@keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+#app { position: relative; z-index: 1; }
+
+/* ===== 导航栏 ===== */
+#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: all 0.4s ease; }
+#navbar.scrolled { background: rgba(13,27,42,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(54,211,153,0.15); box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+.nav-inner { max-width: 1400px; margin: 0 auto; padding: 0 28px; height: 68px; display: flex; align-items: center; gap: 0; }
+.nav-right-group { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.nav-contact-inline { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; border-left: 1px solid rgba(54,211,153,0.2); padding-left: 16px; margin-left: 4px; }
+.nav-contact-inline .nc-phone { font-size: 11.5px; font-weight: 600; color: rgba(232,240,254,0.85); white-space: nowrap; }
+.nav-contact-inline .nc-email { font-size: 12.5px; font-weight: 500; color: #36D399; text-decoration: none; white-space: nowrap; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-globe-new { width: 40px; height: 40px; background: linear-gradient(135deg, #99BF38, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 20px rgba(153,191,56,0.4); animation: glow 3s ease-in-out infinite; }
+.logo-title-new { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+.logo-title-new span { color: #36D399; }
+.logo-sub-new { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; }
+.nav-links { display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
+.nav-link { padding: 7px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; color: rgba(232,240,254,0.8); text-decoration: none; transition: all 0.25s ease; border: 1px solid transparent; }
+.nav-link:hover { background: rgba(54,211,153,0.1); border-color: rgba(54,211,153,0.3); color: #36D399; }
+.nav-link.active { background: linear-gradient(135deg, rgba(22,93,255,0.3), rgba(54,211,153,0.2)); border-color: rgba(54,211,153,0.4); color: #fff; }
+.nav-cta { padding: 9px 22px; background: linear-gradient(135deg, #165DFF, #36D399); border-radius: 24px; font-size: 14px; font-weight: 700; color: #fff; text-decoration: none; cursor: pointer; border: none; box-shadow: 0 4px 20px rgba(22,93,255,0.4); transition: all 0.3s ease; }
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(22,93,255,0.55); }
+
+/* ===== 页面主体 ===== */
+.page-content { padding: 120px 32px 60px; max-width: 1200px; margin: 0 auto; }
+
+/* ===== 标题区 ===== */
+.planner-hero { text-align: center; margin-bottom: 40px; }
+.planner-hero h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 900; color: #fff; margin-bottom: 16px; }
+.planner-hero h1 span { background: linear-gradient(135deg, #36D399, #2FADDE); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.planner-hero p { font-size: 16px; color: rgba(232,240,254,0.6); max-width: 600px; margin: 0 auto; }
+.title-badge { display: inline-block; background: rgba(54,211,153,0.15); color: #36D399; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-bottom: 12px; }
+
+/* ===== 聊天主舱 ===== */
+.chat-container { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; overflow: hidden; max-width: 900px; margin: 0 auto; }
+.chat-topbar { background: linear-gradient(135deg, rgba(22,93,255,0.3), rgba(54,211,153,0.2)); padding: 18px 24px; display: flex; align-items: center; gap: 14px; }
+.chat-avatar { width: 48px; height: 48px; background: linear-gradient(135deg, #36D399, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; animation: pulse 2s ease-in-out infinite; }
+.chat-status h4 { font-size: 16px; font-weight: 700; color: #fff; margin: 0 0 4px; }
+.chat-status p { font-size: 12px; color: rgba(232,240,254,0.6); margin: 0; }
+.chat-messages { height: 480px; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+.message { display: flex; gap: 12px; max-width: 85%; }
+.message.ai { align-self: flex-start; }
+.message.user { align-self: flex-end; flex-direction: row-reverse; }
+.msg-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, #36D399, #2FADDE); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.user .msg-avatar { background: linear-gradient(135deg, #165DFF, #2FADDE); }
+.msg-bubble { background: rgba(255,255,255,0.06); border-radius: 16px; padding: 14px 18px; font-size: 14px; line-height: 1.7; color: rgba(232,240,254,0.9); }
+.user .msg-bubble { background: linear-gradient(135deg, rgba(22,93,255,0.3), rgba(54,211,153,0.2)); }
+.msg-time { font-size: 11px; color: rgba(232,240,254,0.3); margin-top: 6px; }
+
+/* ===== 快捷问题 ===== */
+.quick-questions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 0 24px 20px; }
+.quick-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 10px 18px; font-size: 13px; color: rgba(232,240,254,0.7); cursor: pointer; transition: all 0.3s; }
+.quick-btn:hover { background: rgba(54,211,153,0.15); border-color: rgba(54,211,153,0.4); color: #36D399; }
+
+/* ===== 输入区 ===== */
+.chat-input-area { padding: 20px 24px; background: rgba(0,0,0,0.2); display: flex; gap: 12px; }
+.chat-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 14px 18px; color: #e8f0fe; font-size: 14px; outline: none; transition: all 0.3s; resize: none; min-height: 50px; }
+.chat-input:focus { border-color: #36D399; box-shadow: 0 0 0 3px rgba(54,211,153,0.1); }
+.chat-input::placeholder { color: rgba(232,240,254,0.4); }
+.send-btn { width: 50px; height: 50px; background: linear-gradient(135deg, #165DFF, #36D399); border: none; border-radius: 16px; color: #fff; font-size: 18px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
+.send-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(22,93,255,0.4); }
+
+/* ===== 功能卡片 ===== */
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 48px; }
+.feature-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 28px; text-align: center; transition: all 0.4s cubic-bezier(.34,1.56,.64,1); cursor: pointer; }
+.feature-card:hover { transform: translateY(-8px); border-color: rgba(54,211,153,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(54,211,153,0.1); }
+.feature-icon { font-size: 40px; margin-bottom: 16px; }
+.feature-card h3 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.feature-card p { font-size: 13px; color: rgba(232,240,254,0.55); line-height: 1.6; }
+
+/* ===== 联系表单 ===== */
+.contact-section { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 40px; margin-top: 48px; max-width: 700px; margin-left: auto; margin-right: auto; }
+.contact-section h2 { font-size: 24px; font-weight: 700; color: #fff; text-align: center; margin-bottom: 32px; }
+.contact-form { display: grid; gap: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.contact-form input, .contact-form textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; color: #e8f0fe; font-size: 14px; outline: none; transition: all 0.3s; }
+.contact-form input:focus, .contact-form textarea:focus { border-color: #36D399; box-shadow: 0 0 0 3px rgba(54,211,153,0.1); }
+.contact-form textarea { min-height: 120px; resize: vertical; }
+.contact-form button { background: linear-gradient(135deg, #165DFF, #36D399); color: #fff; border: none; padding: 16px 32px; border-radius: 28px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+.contact-form button:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(22,93,255,0.4); }
+
+/* ===== 页脚 ===== */
+footer { background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08); padding: 60px 32px 0; }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
+.footer-brand .logo-globe-new { width: 36px; height: 36px; font-size: 16px; }
+.footer-desc { font-size: 13px; color: rgba(232,240,254,0.5); line-height: 1.8; margin-top: 14px; max-width: 280px; }
+.footer-col h6 { font-size: 13px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { font-size: 13px; color: rgba(232,240,254,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: #36D399; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding: 20px 0; max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: rgba(232,240,254,0.3); }
+.footer-social { display: flex; gap: 10px; }
+.footer-social a { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 13px; color: rgba(232,240,254,0.5); transition: all 0.25s; }
+.footer-social a:hover { background: rgba(54,211,153,0.15); border-color: rgba(54,211,153,0.4); color: #36D399; }
+
+/* 响应式 */
+@media (max-width: 1024px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .nav-contact-inline { display: none; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .page-content { padding: 100px 16px 40px; }
+  .form-row { grid-template-columns: 1fr; }
+  .chat-container { border-radius: 16px; }
+  .chat-messages { height: 400px; }
+}
+</style>
+</head>
+<body>
+<!-- 背景光晕 -->
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<div id="app">
+<!-- ===== 导航栏 ===== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-globe-new">🎓</div>
+      <div class="logo-texts">
+        <div class="logo-title-new">留学<span>规划</span></div>
+        <div class="logo-sub-new">One-Stop Solution</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">主页</a>
+      <a href="在线云校验.html" class="nav-link">在线云校验</a>
+      <a href="互助中心服务.html" class="nav-link">互助中心</a>
+      <a href="世界机会自选.html" class="nav-link">院校机遇一览</a>
+      <a href="智能留学规划.html" class="nav-link active">智能留学规划</a>
+    </div>
+    <div class="nav-right-group">
+      <a href="#" class="nav-cta">立即AI测评</a>
+      <div class="nav-contact-inline">
+        <span class="nc-phone">020-37512006</span>
+        <a href="mailto:zjxybgs@scauzj.edu.cn" class="nc-email">zjxybgs@scauzj.edu.cn</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== 页面主体 ===== -->
+<div class="page-content">
+  <!-- 标题区 -->
+  <div class="planner-hero">
+    <div class="title-badge">🤖 AI 智能规划助手</div>
+    <h1>智能留学<span>规划</span></h1>
+    <p>基于AI技术，精准分析你的背景与需求，匹配最优留学方案</p>
+  </div>
+
+  <!-- AI聊天主舱 -->
+  <div class="chat-container">
+    <div class="chat-topbar">
+      <div class="chat-avatar">🤖</div>
+      <div class="chat-status">
+        <h4>留学规划助手</h4>
+        <p>在线 · 立即响应</p>
+      </div>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+      <div class="message ai">
+        <div class="msg-avatar">🤖</div>
+        <div class="msg-bubble">
+          你好！我是你的AI留学规划助手。我可以帮你：
+          <br>📊 评估你的留学竞争力
+          <br>🎯 推荐适合的留学国家和院校
+          <br>📝 规划申请时间线
+          <br>💡 提供选校建议
+          <br><br>请告诉我你的基本情况（如专业、 GPA、预算等），或者直接点击下方的快捷问题。
+          <div class="msg-time">刚刚</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-questions">
+      <button class="quick-btn" onclick="sendQuickQuestion('我的背景能申请哪些学校？')">我的背景能申请哪些学校？</button>
+      <button class="quick-btn" onclick="sendQuickQuestion('推荐适合的留学国家')">推荐适合的留学国家</button>
+      <button class="quick-btn" onclick="sendQuickQuestion('申请时间规划')">申请时间规划</button>
+      <button class="quick-btn" onclick="sendQuickQuestion('留学费用估算')">留学费用估算</button>
+    </div>
+
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="userInput" placeholder="输入你的问题..." rows="1"></textarea>
+      <button class="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <!-- 功能卡片 -->
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>竞争力评估</h3>
+      <p>基于你的GPA、语言成绩、实习经历等，精准评估留学竞争力</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>院校智能匹配</h3>
+      <p>AI算法结合你的偏好，匹配最适合的院校和专业</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3>申请时间规划</h3>
+      <p>科学规划申请节点，确保每个环节有序推进</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💰</div>
+      <h3>费用预算分析</h3>
+      <p>根据目标国家和院校，提供详细的费用预算方案</p>
+    </div>
+  </div>
+
+  <!-- 联系表单 -->
+  <div class="contact-section">
+    <h2>📝 预约一对一咨询</h2>
+    <form class="contact-form" onsubmit="submitContact(event)">
+      <div class="form-row">
+        <input type="text" placeholder="姓名" required>
+        <input type="tel" placeholder="电话" required>
+      </div>
+      <input type="email" placeholder="邮箱" required>
+      <textarea placeholder="请描述你的留学需求..."></textarea>
+      <button type="submit">提交预约申请</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== 页脚 ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-globe-new">🎓</div>
+        <div class="logo-texts">
+          <div class="logo-title-new" style="font-size:16px;">留学<span>规划</span></div>
+          <div class="logo-sub-new">One-Stop Solution</div>
+        </div>
+      </a>
+      <p class="footer-desc">一站式专业留学服务，AI智能测评精准匹配</p>
+      <p class="footer-desc" style="margin-top:10px;">📞 020-37512006 / 020-87990713<br>✉ zjxybgs@scauzj.edu.cn</p>
+    </div>
+    <div class="footer-col">
+      <h6>快速导航</h6>
+      <ul>
+        <li><a href="index.html">主页</a></li>
+        <li><a href="在线云校验.html">在线云校验</a></li>
+        <li><a href="互助中心服务.html">互助中心</a></li>
+        <li><a href="世界机会自选.html">院校机遇一览</a></li>
+        <li><a href="智能留学规划.html">智能留学规划</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>热门目的地</h6>
+      <ul>
+        <li><a href="#">英国留学</a></li>
+        <li><a href="#">澳大利亚留学</a></li>
+        <li><a href="#">新加坡留学</a></li>
+        <li><a href="#">加拿大留学</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>服务支持</h6>
+      <ul>
+        <li><a href="#">常见问题</a></li>
+        <li><a href="#">申请指南</a></li>
+        <li><a href="#">联系我们</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 留学规划. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="#">💬</a>
+      <a href="#">📱</a>
+      <a href="#">🐧</a>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+// 导航栏滚动
+window.addEventListener('scroll', function() {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// 发送消息
+function sendMessage() {
+  var input = document.getElementById('userInput');
+  var message = input.value.trim();
+  if(!message) return;
+  
+  addMessage(message, 'user');
+  input.value = '';
+  
+  // 模拟AI回复
+  setTimeout(function() {
+    var replies = [
+      '感谢你的咨询！根据你的情况，我建议先评估GPA和语言成绩，然后我们可以进一步讨论选校方案。',
+      '很好的问题！让我帮你分析一下：根据你的背景，英国、澳大利亚和新加坡的院校会比较匹配。',
+      '明白了！申请时间规划非常重要，一般建议提前6-12个月开始准备。我可以为你制定详细的时间表。',
+      '关于留学费用，不同国家和院校差异很大。一般而言，英国年费用约25-35万，澳大利亚约20-30万。'
+    ];
+    var randomReply = replies[Math.floor(Math.random() * replies.length)];
+    addMessage(randomReply, 'ai');
+  }, 1000);
+}
+
+// 快捷问题
+function sendQuickQuestion(question) {
+  addMessage(question, 'user');
+  document.getElementById('userInput').value = question;
+  sendMessage();
+}
+
+// 添加消息
+function addMessage(text, type) {
+  var container = document.getElementById('chatMessages');
+  var time = new Date().toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+  
+  var html = '<div class="message ' + type + '">' +
+    '<div class="msg-avatar">' + (type === 'ai' ? '🤖' : '👤') + '</div>' +
+    '<div class="msg-bubble">' + text + '<div class="msg-time">' + time + '</div></div>' +
+  '</div>';
+  
+  container.insertAdjacentHTML('beforeend', html);
+  container.scrollTop = container.scrollHeight;
+}
+
+// 提交联系表单
+function submitContact(e) {
+  e.preventDefault();
+  alert('感谢提交！我们的顾问将尽快联系您。');
+}
+
+// 回车发送
+document.getElementById('userInput').addEventListener('keypress', function(e) {
+  if(e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+</script>
+</body>
+</html>

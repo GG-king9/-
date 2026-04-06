@@ -1,0 +1,2762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>留学规划 · 开启你的全球留学新征程</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="一站式专业留学服务，AI智能测评，精准匹配最适合你的留学方向" />
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#165DFF',
+          accent:  '#36D399',
+          green:   '#99BF38',
+          blue:    '#2FADDE',
+          dark:    '#0d1b2a',
+          glass:   'rgba(255,255,255,0.08)',
+        },
+        fontFamily: {
+          sans: ['"Noto Sans SC"', 'Inter', 'system-ui', 'sans-serif'],
+        },
+        backdropBlur: { xs: '2px' },
+        keyframes: {
+          fadeUp:    { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+          fadeIn:    { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+          scaleIn:   { '0%': { opacity: '0', transform: 'scale(0.88)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+          float:     { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+          pulse2:    { '0%,100%': { opacity: '1' }, '50%': { opacity: '0.5' } },
+          shimmer:   { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+          slideRight:{ '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } },
+          spin180:   { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
+          glow:      { '0%,100%': { boxShadow: '0 0 20px rgba(54,211,153,0.3)' }, '50%': { boxShadow: '0 0 40px rgba(54,211,153,0.7)' } },
+          bounceX:   { '0%,100%': { transform: 'translateX(0)' }, '50%': { transform: 'translateX(6px)' } },
+        },
+        animation: {
+          'fade-up':     'fadeUp 0.7s ease forwards',
+          'fade-in':     'fadeIn 0.5s ease forwards',
+          'scale-in':    'scaleIn 0.4s cubic-bezier(.34,1.56,.64,1) forwards',
+          'float':       'float 4s ease-in-out infinite',
+          'float-slow':  'float 6s ease-in-out infinite',
+          'shimmer':     'shimmer 2s linear infinite',
+          'glow':        'glow 2s ease-in-out infinite',
+          'bounce-x':    'bounceX 1.4s ease-in-out infinite',
+          'spin-slow':   'spin180 12s linear infinite',
+        },
+      }
+    }
+  }
+</script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ===== 全局重置 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
+  background: #0d1b2a;
+  color: #e8f0fe;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 粒子画布 ===== */
+#particle-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== 主内容层 ===== */
+#app { position: relative; z-index: 1; }
+
+/* ===== 导航栏 ===== */
+#navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  transition: all 0.4s ease;
+  padding: 0;
+}
+#navbar.scrolled {
+  background: rgba(13,27,42,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(54,211,153,0.15);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+/* 导航链接区缩小间距，居中弹性 */
+.nav-inner .nav-links {
+  flex: 1;
+  justify-content: center;
+}
+/* 右侧：CTA + 联系信息组合 */
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+/* 联系信息块：上下排列，电话在上邮箱在下 */
+.nav-contact-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  border-left: 1px solid rgba(54,211,153,0.2);
+  padding-left: 16px;
+  margin-left: 4px;
+}
+.nav-contact-inline .nc-phone {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(232,240,254,0.85);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.nav-contact-inline .nc-email {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #36D399;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.55px;
+  transition: opacity 0.2s;
+}
+.nav-contact-inline .nc-email:hover { opacity: 0.75; }
+/* 旧的 contact-bar 隐藏（保留兼容性） */
+.nav-contact-bar { display: none !important; }
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.logo-globe-new {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, #99BF38, #2FADDE);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 20px rgba(153,191,56,0.4);
+  animation: glow 3s ease-in-out infinite;
+}
+.logo-texts { display: flex; flex-direction: column; line-height: 1.2; }
+.logo-title-new { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+.logo-title-new span { color: #36D399; }
+.logo-sub-new { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; }
+
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 14px; font-weight: 500;
+  color: rgba(232,240,254,0.8);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+.nav-link:hover {
+  background: rgba(54,211,153,0.1);
+  border-color: rgba(54,211,153,0.3);
+  color: #36D399;
+}
+.nav-link.active {
+  background: linear-gradient(135deg, rgba(22,93,255,0.3), rgba(54,211,153,0.2));
+  border-color: rgba(54,211,153,0.4);
+  color: #fff;
+}
+.nav-cta {
+  padding: 9px 22px;
+  background: linear-gradient(135deg, #165DFF, #36D399);
+  border-radius: 24px;
+  font-size: 14px; font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 20px rgba(22,93,255,0.4);
+  transition: all 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.nav-cta::after {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(22,93,255,0.55); }
+.nav-cta:hover::after { left: 160%; }
+
+/* ===== Hero区 ===== */
+#hero {
+  min-height: 20vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  padding: 10px 32px 5px;
+  overflow: hidden;
+}
+.hero-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+.orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #165DFF 0%, transparent 70%); top: -10%; left: -10%; animation: float 8s ease-in-out infinite; }
+.orb2 { width: 500px; height: 500px; background: radial-gradient(circle, #36D399 0%, transparent 70%); bottom: 5%; right: -5%; animation: float 10s ease-in-out infinite 2s; }
+.orb3 { width: 300px; height: 300px; background: radial-gradient(circle, #99BF38 0%, transparent 70%); top: 40%; left: 40%; animation: float 7s ease-in-out infinite 4s; opacity: 0.2; }
+
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(54,211,153,0.1);
+  border: 1px solid rgba(54,211,153,0.3);
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-size: 12px; font-weight: 600; color: #36D399;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fade-up 0.7s ease 0.2s forwards;
+}
+.hero-badge::before { content: ''; width: 6px; height: 6px; background: #36D399; border-radius: 50%; animation: pulse2 1.5s infinite; }
+.hero-title {
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fade-up 0.7s ease 0.4s forwards;
+}
+.hero-title .grad {
+  background: linear-gradient(135deg, #36D399, #165DFF, #99BF38);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+.hero-sub {
+  font-size: 18px; font-weight: 400;
+  color: rgba(232,240,254,0.7);
+  line-height: 1.7;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fade-up 0.7s ease 0.6s forwards;
+}
+.hero-sub strong { color: #36D399; font-weight: 700; }
+.hero-buttons {
+  display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+  opacity: 0;
+  animation: fade-up 0.7s ease 0.8s forwards;
+}
+.hero-btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #165DFF 0%, #36D399 100%);
+  border-radius: 50px;
+  font-size: 17px; font-weight: 800;
+  color: #fff;
+  border: none; cursor: pointer;
+  box-shadow: 0 8px 32px rgba(22,93,255,0.5);
+  transition: all 0.3s ease;
+  position: relative; overflow: hidden;
+  letter-spacing: 0.3px;
+}
+.hero-btn-primary::before {
+  content: '';
+  position: absolute; inset: -2px;
+  background: linear-gradient(135deg, #165DFF, #36D399, #99BF38, #165DFF);
+  background-size: 300% 300%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: shimmer 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.hero-btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 48px rgba(22,93,255,0.65); }
+.hero-btn-primary:hover::before { opacity: 1; }
+.hero-btn-primary .arrow { animation: bounce-x 1.4s infinite; }
+.hero-btn-secondary {
+  padding: 15px 32px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 50px;
+  font-size: 15px; font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.hero-btn-secondary:hover {
+  background: rgba(54,211,153,0.1);
+  border-color: rgba(54,211,153,0.4);
+  color: #36D399;
+}
+
+/* 英雄区浮动装饰数据卡 */
+.hero-float-cards {
+  display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+  margin-top: 60px;
+  opacity: 0;
+  animation: fade-up 0.7s ease 1.0s forwards;
+}
+.hero-stat-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 16px 24px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.hero-stat-card:hover {
+  background: rgba(54,211,153,0.08);
+  border-color: rgba(54,211,153,0.3);
+  transform: translateY(-4px);
+}
+.hero-stat-num { font-size: 28px; font-weight: 900; color: #36D399; line-height: 1; }
+.hero-stat-label { font-size: 12px; color: rgba(232,240,254,0.6); margin-top: 4px; }
+
+/* ===== 核心服务卡片区 ===== */
+#services {
+  padding: 100px 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.section-badge {
+  display: inline-block;
+  background: rgba(54,211,153,0.1);
+  border: 1px solid rgba(54,211,153,0.3);
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 12px; font-weight: 600; color: #36D399;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-title .grad {
+  background: linear-gradient(135deg, #36D399, #2FADDE);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section-sub { font-size: 16px; color: rgba(232,240,254,0.55); max-width: 560px; line-height: 1.7; }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+}
+.service-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 32px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+.service-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--card-color1, #165DFF), var(--card-color2, #36D399));
+  opacity: 0;
+  transition: opacity 0.4s;
+  border-radius: inherit;
+}
+.service-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--card-border, rgba(54,211,153,0.4)); box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px var(--card-glow, rgba(54,211,153,0.2)); }
+.service-card:hover::before { opacity: 0.06; }
+.service-card .card-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+  position: relative; z-index: 1;
+  transition: transform 0.3s;
+}
+.service-card:hover .card-icon { transform: scale(1.1) rotate(-5deg); }
+.service-card .card-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 10px; position: relative; z-index: 1; }
+.service-card .card-desc { font-size: 14px; color: rgba(232,240,254,0.6); line-height: 1.7; position: relative; z-index: 1; }
+.service-card .card-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 20px;
+  font-size: 13px; font-weight: 700;
+  color: var(--card-accent, #36D399);
+  position: relative; z-index: 1;
+  transition: gap 0.2s;
+}
+.service-card:hover .card-link { gap: 10px; }
+
+/* ===== 关于我们区 ===== */
+#about {
+  padding: 100px 32px;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.about-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.about-visual {
+  position: relative;
+}
+.about-img-wrap {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  position: relative;
+}
+.about-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.about-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(22,93,255,0.2), rgba(54,211,153,0.1));
+  border-radius: 24px;
+}
+.about-float-badge {
+  position: absolute;
+  background: rgba(13,27,42,0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(54,211,153,0.3);
+  border-radius: 16px;
+  padding: 14px 18px;
+  animation: float 5s ease-in-out infinite;
+}
+.about-float-badge.b1 { bottom: -20px; left: -20px; }
+.about-float-badge.b2 { top: -20px; right: -20px; animation-delay: 2.5s; }
+.about-float-badge .badge-num { font-size: 24px; font-weight: 900; color: #36D399; line-height: 1; }
+.about-float-badge .badge-txt { font-size: 11px; color: rgba(232,240,254,0.6); }
+.about-text .section-sub { max-width: 100%; }
+.about-list { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px; justify-items: start; }
+.about-list-col h6 { font-size: 13px; font-weight: 700; color: #36D399; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(54,211,153,0.3); display: inline-block; }
+.about-list-col li { list-style: none; font-size: 14px; color: rgba(232,240,254,0.75); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.about-list-col li::before { content: '✦'; color: #36D399; margin-right: 8px; font-weight: 700; }
+
+/* 可滚动榜单样式 */
+.country-rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.country-rank-list::-webkit-scrollbar { width: 4px; }
+.country-rank-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 2px; }
+.country-rank-list::-webkit-scrollbar-thumb { background: rgba(54,211,153,0.3); border-radius: 2px; }
+.country-rank-list::-webkit-scrollbar-thumb:hover { background: rgba(54,211,153,0.5); }
+
+.country-rank-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.25s;
+  cursor: default;
+}
+.country-rank-item:hover {
+  background: rgba(54,211,153,0.05);
+  padding-left: 6px;
+  padding-right: 6px;
+  margin: 0 -6px;
+  border-radius: 6px;
+}
+.country-rank-item.active {
+  background: rgba(54,211,153,0.15);
+  border-left: 3px solid #36D399;
+  padding-left: 10px;
+  margin-left: -3px;
+}
+
+/* 国家版图动画容器 */
+.country-map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.country-map-container.visible {
+  opacity: 1;
+}
+.country-map {
+  width: 70%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 27, 42, 0.85);
+  border-radius: 12px;
+  border: 2px solid rgba(54, 211, 153, 0.6);
+  box-shadow: 0 0 40px rgba(54, 211, 153, 0.3), inset 0 0 30px rgba(54, 211, 153, 0.1);
+  animation: mapPulse 2s ease-in-out infinite;
+}
+@keyframes mapPulse {
+  0%, 100% { box-shadow: 0 0 40px rgba(54, 211, 153, 0.3), inset 0 0 30px rgba(54, 211, 153, 0.1); }
+  50% { box-shadow: 0 0 60px rgba(54, 211, 153, 0.5), inset 0 0 40px rgba(54, 211, 153, 0.2); }
+}
+.country-map svg {
+  width: 80%;
+  height: 80%;
+}
+.country-map path {
+  fill: rgba(54, 211, 153, 0.7);
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 0.5;
+  transition: all 0.3s ease;
+}
+.country-map:hover path {
+  fill: rgba(54, 211, 153, 0.9);
+}
+.country-map-label {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(54, 211, 153, 0.8);
+  padding: 8px 24px;
+  background: rgba(22, 93, 255, 0.6);
+  border-radius: 20px;
+  border: 1px solid rgba(54, 211, 153, 0.5);
+}
+.cr-rank {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #165DFF, #36D399);
+}
+.cr-rank.top3 {
+  background: linear-gradient(135deg, #f9d423, #f2994a);
+  box-shadow: 0 0 8px rgba(249,212,35,0.4);
+}
+.cr-content { flex: 1; min-width: 0; }
+.cr-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 3px;
+}
+.cr-desc {
+  font-size: 11px;
+  color: rgba(232,240,254,0.55);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.contact-info { margin-top: 28px; display: flex; flex-direction: column; gap: 8px; }
+.contact-info p { font-size: 13px; color: rgba(232,240,254,0.6); }
+.contact-info strong { color: #36D399; }
+
+/* ===== 服务Tab区 ===== */
+#service-section {
+  padding: 100px 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.tabs-header { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 40px; }
+.tab-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 22px;
+  border-radius: 12px 12px 0 0;
+  font-size: 14px; font-weight: 600;
+  color: rgba(232,240,254,0.55);
+  background: transparent;
+  border: none; border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: #fff; background: rgba(255,255,255,0.04); }
+.tab-btn.active { color: #36D399; border-bottom-color: #36D399; background: rgba(54,211,153,0.06); }
+.tab-icon { font-size: 16px; }
+.tab-pane-content { display: none; animation: fade-up 0.4s ease; }
+.tab-pane-content.active { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: start; }
+.tab-visual {
+  background: linear-gradient(135deg, rgba(22,93,255,0.1), rgba(54,211,153,0.08));
+  border: 1px solid rgba(54,211,153,0.15);
+  border-radius: 24px;
+  padding: 32px;
+  text-align: center;
+}
+.tab-visual .tab-big-icon { font-size: 64px; margin-bottom: 16px; }
+.tab-visual h4 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+.tab-visual p { font-size: 13px; color: rgba(232,240,254,0.6); line-height: 1.7; }
+.tab-body h3 { font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 16px; }
+.tab-body p { font-size: 14px; color: rgba(232,240,254,0.65); line-height: 1.8; margin-bottom: 14px; }
+.tab-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.tab-tag {
+  padding: 5px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  background: rgba(54,211,153,0.1); border: 1px solid rgba(54,211,153,0.25); color: #36D399;
+}
+
+/* ===== 评价区域 ===== */
+#testimonial {
+  padding: 80px 32px;
+  background: linear-gradient(135deg, rgba(22,93,255,0.06), rgba(54,211,153,0.04));
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.testimonial-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+.testimonial-track { overflow: hidden; }
+.testimonial-slide { display: none; }
+.testimonial-slide.active { display: block; animation: fade-in 0.5s ease; }
+.testimonial-text {
+  font-size: 18px; line-height: 1.8; font-style: italic;
+  color: rgba(232,240,254,0.8);
+  margin-bottom: 24px;
+}
+.testimonial-author { font-size: 14px; font-weight: 700; color: #36D399; }
+.testimonial-dots { display: flex; justify-content: center; gap: 8px; margin-top: 28px; }
+.t-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: none; cursor: pointer;
+  transition: all 0.25s;
+}
+.t-dot.active { width: 24px; border-radius: 4px; background: #36D399; }
+
+/* ===== 页脚 ===== */
+footer {
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 60px 32px 0;
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 48px;
+}
+.footer-brand .logo-globe-new { width: 36px; height: 36px; font-size: 16px; }
+.footer-desc { font-size: 13px; color: rgba(232,240,254,0.5); line-height: 1.8; margin-top: 14px; max-width: 280px; }
+.footer-col h6 { font-size: 13px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { font-size: 13px; color: rgba(232,240,254,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: #36D399; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 20px 0;
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; color: rgba(232,240,254,0.3);
+}
+.footer-social { display: flex; gap: 10px; }
+.footer-social a {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: rgba(232,240,254,0.5);
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.footer-social a:hover { background: rgba(54,211,153,0.15); border-color: rgba(54,211,153,0.4); color: #36D399; }
+
+/* ===== 悬浮测评弹窗 ===== */
+#modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(8,16,28,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+#modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#modal-box {
+  background: rgba(18,32,52,0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(54,211,153,0.25);
+  border-radius: 28px;
+  width: 100%; max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow:
+    0 40px 120px rgba(0,0,0,0.8),
+    0 0 0 1px rgba(255,255,255,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  transform: scale(0.88);
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+#modal-overlay.open #modal-box { transform: scale(1); }
+
+/* 弹窗自定义滚动条 */
+#modal-box::-webkit-scrollbar { width: 6px; }
+#modal-box::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+#modal-box::-webkit-scrollbar-thumb { background: rgba(54,211,153,0.3); border-radius: 3px; }
+
+/* 弹窗顶部渐变边框 */
+#modal-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #165DFF, #36D399, #99BF38, #2FADDE, #165DFF);
+  background-size: 300% 100%;
+  border-radius: 28px 28px 0 0;
+  animation: shimmer 3s linear infinite;
+}
+
+.modal-header {
+  position: sticky; top: 0;
+  background: rgba(18,32,52,0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 24px 32px 20px;
+  z-index: 10;
+  border-radius: 28px 28px 0 0;
+}
+.modal-header-inner { display: flex; align-items: center; justify-content: space-between; }
+.modal-title-area { display: flex; align-items: center; gap: 14px; }
+.modal-title-icon {
+  width: 46px; height: 46px;
+  background: linear-gradient(135deg, #165DFF, #36D399);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 6px 20px rgba(22,93,255,0.4);
+}
+.modal-title { font-size: 22px; font-weight: 900; color: #fff; margin: 0; }
+.modal-title span { color: #36D399; }
+.modal-subtitle { font-size: 13px; color: rgba(232,240,254,0.5); margin: 3px 0 0; }
+.modal-close {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 18px; color: rgba(232,240,254,0.6);
+  transition: all 0.25s;
+  flex-shrink: 0;
+}
+.modal-close:hover { background: rgba(232,78,78,0.15); border-color: rgba(232,78,78,0.4); color: #ff4d4d; transform: rotate(90deg); }
+
+.modal-body { padding: 32px; }
+
+/* 弹窗测评网格 */
+.modal-assess-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.modal-assess-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 22px;
+  transition: all 0.3s;
+}
+.modal-assess-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(54,211,153,0.2);
+  transform: translateY(-2px);
+}
+.mac-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.mac-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.mac-icon.c1 { background: linear-gradient(135deg, rgba(153,191,56,0.3), rgba(153,191,56,0.1)); }
+.mac-icon.c2 { background: linear-gradient(135deg, rgba(47,173,222,0.3), rgba(47,173,222,0.1)); }
+.mac-icon.c3 { background: linear-gradient(135deg, rgba(255,160,80,0.3), rgba(255,160,80,0.1)); }
+.mac-icon.c4 { background: linear-gradient(135deg, rgba(160,100,240,0.3), rgba(160,100,240,0.1)); }
+.mac-title { font-size: 14px; font-weight: 700; color: #fff; margin: 0; }
+.mac-sub { font-size: 11px; color: rgba(232,240,254,0.4); margin: 0; }
+
+/* 弹窗选项胶囊 */
+.modal-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.modal-options input[type="radio"],
+.modal-options input[type="checkbox"] { display: none; }
+.modal-options label {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(232,240,254,0.65);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+.modal-options label:hover {
+  background: rgba(54,211,153,0.1);
+  border-color: rgba(54,211,153,0.3);
+  color: #36D399;
+}
+.modal-options input[type="radio"]:checked + label {
+  background: linear-gradient(135deg, rgba(153,191,56,0.25), rgba(153,191,56,0.1));
+  border-color: #99BF38;
+  color: #99BF38;
+  box-shadow: 0 0 12px rgba(153,191,56,0.2);
+  transform: scale(1.04);
+}
+.modal-options input[type="checkbox"]:checked + label {
+  background: linear-gradient(135deg, rgba(22,93,255,0.25), rgba(54,211,153,0.15));
+  border-color: #36D399;
+  color: #36D399;
+  box-shadow: 0 0 12px rgba(54,211,153,0.2);
+  transform: scale(1.04);
+}
+
+/* 弹窗预算卡 - 创意虚线坐标系+柱状图+动态emoji */
+.modal-budget-card {
+  background: rgba(22,93,255,0.06);
+  border: 1px solid rgba(22,93,255,0.2);
+  border-radius: 18px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
+/* 整体布局：左30%文案 + 中30%emoji + 右40%柱状图 */
+.mbc-layout {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+
+/* ===== 左栏30%：动态文案推荐区 ===== */
+.mbc-text-zone {
+  flex: 0 0 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(22,93,255,0.08);
+  border: 1px solid rgba(54,211,153,0.2);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.mbc-text-zone::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #165DFF, #36D399, #99BF38);
+  opacity: 0.6;
+}
+.mtz-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(54,211,153,0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mtz-content {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+  min-height: 60px;
+  display: flex;
+  align-items: flex-start;
+}
+.mtz-text {
+  background: linear-gradient(135deg, #36D399, #165DFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(54,211,153,0.3);
+}
+.mtz-cursor {
+  display: inline-block;
+  color: #36D399;
+  font-weight: 400;
+  animation: cursorBlink 1s infinite;
+  margin-left: 2px;
+}
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ===== 中栏30%：emoji展示区 ===== */
+.mbc-emoji-zone {
+  flex: 0 0 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== 左侧：动态emoji区域 ===== */
+.mbc-emoji-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: default;
+}
+.mbc-emoji {
+  font-size: 68px;
+  line-height: 1;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.4));
+  position: relative;
+  z-index: 2;
+}
+/* emoji专属微动效 - 升级版 */
+.mbc-emoji.float { animation: emojiFloat 2s ease-in-out infinite; }
+.mbc-emoji.wiggle { animation: emojiWiggle 1.5s ease-in-out infinite; }
+.mbc-emoji.pulse { animation: emojiPulse 1.2s ease-in-out infinite; }
+.mbc-emoji.shocked { animation: emojiShocked 0.8s ease-in-out infinite; }
+
+@keyframes emojiFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(-2deg); }
+  75% { transform: translateY(-4px) rotate(2deg); }
+  50% { transform: translateY(-12px) rotate(0deg); }
+}
+@keyframes emojiWiggle {
+  0%,100% { transform: translateY(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-4px) rotate(-6deg) scale(1.02); }
+  40% { transform: translateY(0) rotate(4deg) scale(0.98); }
+  60% { transform: translateY(-4px) rotate(-4deg) scale(1.01); }
+  80% { transform: translateY(0) rotate(2deg) scale(0.99); }
+}
+@keyframes emojiPulse {
+  0%,100% { transform: scale(1) translateY(0); }
+  25% { transform: scale(1.12) translateY(-6px); }
+  50% { transform: scale(0.96) translateY(2px); }
+  75% { transform: scale(1.08) translateY(-4px); }
+}
+@keyframes emojiShocked {
+  0% { transform: scale(1) rotate(0deg); }
+  15% { transform: scale(1.2) rotate(-5deg); }
+  30% { transform: scale(0.9) rotate(8deg); }
+  45% { transform: scale(1.25) rotate(-3deg); }
+  60% { transform: scale(0.85) rotate(5deg); }
+  75% { transform: scale(1.15) rotate(-2deg); }
+  90% { transform: scale(1.05) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* 眼球容器 - 修复定位问题 */
+.emoji-eyes {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.emoji-eyes.visible { opacity: 1; }
+
+/* 眼球样式 - 统一规格 */
+.emoji-eye {
+  width: 22px;
+  height: 26px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+.eye-ball {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s linear;
+  box-shadow: inset -2px -2px 3px rgba(0,0,0,0.2);
+}
+
+/* ===== 右侧：柱状图+数值区 ===== */
+.mbc-bar-area {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mbc-top { display: flex; align-items: center; justify-content: space-between; }
+.mbc-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #fff; }
+.mbc-display { display: flex; align-items: baseline; gap: 4px; }
+.mbc-num {
+  font-size: 42px; font-weight: 900;
+  color: #ff9f43;
+  min-width: 80px; text-align: right; line-height: 1;
+  transition: color 0.3s;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+}
+.mbc-num.bounce { animation: numBounce 0.3s ease; }
+@keyframes numBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.mbc-unit { font-size: 16px; font-weight: 700; color: rgba(232,240,254,0.5); }
+
+/* ===== 创意虚线平面直角坐标系（仅纵轴） ===== */
+.mbc-coordinate {
+  position: relative;
+  height: 200px;
+  margin-left: 20px;
+  padding-right: 20px;
+}
+/* 纵轴 - 浅灰半透虚线 */
+.mbc-y-axis {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.25) 0px,
+    rgba(255,255,255,0.25) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+}
+/* 纵轴标签 */
+.mbc-y-labels {
+  position: absolute;
+  left: -40px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(232,240,254,0.3);
+}
+
+/* ===== 柱状图（沿纵轴上下拖动） ===== */
+.mbc-bar-wrapper {
+  position: absolute;
+  left: 16px;
+  right: 20px;
+  bottom: 0;
+  height: 180px;
+  cursor: ns-resize;
+}
+.mbc-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  background: linear-gradient(180deg, #36D399 0%, #165DFF 100%);
+  border-radius: 12px 12px 0 0;
+  transition: height 0.15s ease-out;
+  box-shadow: 0 0 24px rgba(54,211,153,0.4), 0 0 0 1px rgba(54,211,153,0.3);
+  cursor: ns-resize;
+}
+.mbc-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  border-radius: 12px 12px 0 0;
+  pointer-events: none;
+}
+/* 柱状图悬停发光 */
+.mbc-bar:hover {
+  box-shadow: 0 0 36px rgba(54,211,153,0.6), 0 0 0 2px rgba(54,211,153,0.5);
+}
+/* 拖拽时的效果 */
+.mbc-bar.dragging {
+  transition: none;
+  box-shadow: 0 0 40px rgba(54,211,153,0.7), 0 0 0 2px rgba(54,211,153,0.6);
+}
+
+/* ===== 档位徽标 ===== */
+.mbc-tier {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+  margin-top: 12px;
+  transition: all 0.4s;
+}
+.mt-economy  { background: rgba(39,174,96,0.12);  color: #27ae60; border: 1px solid rgba(39,174,96,0.3); }
+.mt-standard { background: rgba(22,93,255,0.12);  color: #165DFF; border: 1px solid rgba(22,93,255,0.3); }
+.mt-premium  { background: rgba(230,126,34,0.12); color: #e67e22; border: 1px solid rgba(230,126,34,0.3); }
+.mt-elite    { background: rgba(142,68,173,0.12); color: #8e44ad; border: 1px solid rgba(142,68,173,0.3); }
+
+/* 弹窗匹配按钮 */
+.modal-match-btn-wrap { text-align: center; margin-bottom: 24px; }
+.modal-match-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 52px;
+  background: linear-gradient(135deg, #165DFF 0%, #36D399 100%);
+  border-radius: 50px; border: none; cursor: pointer;
+  font-size: 17px; font-weight: 900; color: #fff;
+  box-shadow: 0 8px 32px rgba(22,93,255,0.5);
+  transition: all 0.3s; position: relative; overflow: hidden;
+  letter-spacing: 0.3px;
+}
+.modal-match-btn::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #165DFF, #36D399, #99BF38, #165DFF);
+  background-size: 300%;
+  animation: shimmer 3s linear infinite;
+  opacity: 0; transition: opacity 0.3s;
+}
+.modal-match-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 48px rgba(22,93,255,0.65); }
+.modal-match-btn:hover::before { opacity: 1; }
+.modal-match-btn:active { transform: scale(0.97); }
+.mmb-arrow { animation: bounce-x 1.4s infinite; font-size: 18px; }
+/* 波纹效果 */
+.modal-match-btn .ripple {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: scale(0); animation: rippleAnim 0.6s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+/* 弹窗加载 */
+.modal-loading { display: none; text-align: center; padding: 32px; }
+.modal-loading.show { display: block; }
+.modal-loading-dots { display: inline-flex; gap: 10px; align-items: center; }
+.modal-loading-dots span {
+  width: 12px; height: 12px; border-radius: 50%;
+  animation: loadBounce 1.2s infinite ease-in-out both;
+}
+.modal-loading-dots span:nth-child(1) { background: #165DFF; }
+.modal-loading-dots span:nth-child(2) { background: #36D399; animation-delay: 0.16s; }
+.modal-loading-dots span:nth-child(3) { background: #99BF38; animation-delay: 0.32s; }
+@keyframes loadBounce {
+  0%,80%,100% { transform: scale(0.6) translateY(0); opacity: 0.4; }
+  40% { transform: scale(1.2) translateY(-8px); opacity: 1; }
+}
+.modal-loading p { color: #36D399; font-size: 14px; font-weight: 700; margin-top: 12px; }
+
+/* 弹窗结果 */
+.modal-result { display: none; }
+.modal-result.show { display: block; animation: fade-up 0.5s ease; }
+.modal-result-header { text-align: center; margin-bottom: 20px; }
+.modal-result-header h3 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+.modal-result-header p { font-size: 13px; color: rgba(232,240,254,0.5); }
+.modal-result-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 14px;
+}
+.mr-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px 14px; text-align: center;
+  position: relative; overflow: hidden;
+  transition: all 0.3s;
+}
+.mr-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #165DFF, #36D399);
+  border-radius: 16px 16px 0 0;
+}
+.mr-card:hover { transform: translateY(-5px); border-color: rgba(54,211,153,0.3); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+.mr-rank {
+  position: absolute; top: 12px; right: 12px;
+  width: 22px; height: 22px; border-radius: 50%;
+  font-size: 11px; font-weight: 900; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.mr-rank.r1 { background: linear-gradient(135deg,#f9d423,#f2994a); box-shadow: 0 0 10px rgba(249,212,35,0.4); }
+.mr-rank.r2 { background: linear-gradient(135deg,#c0c0c0,#909090); }
+.mr-rank.r3 { background: linear-gradient(135deg,#cd7f32,#a05a20); }
+.mr-rank.r4 { background: rgba(100,120,150,0.6); }
+.mr-code { font-size: 30px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 4px; }
+.mr-name { font-size: 14px; font-weight: 700; color: rgba(232,240,254,0.8); margin-bottom: 10px; }
+.mr-bar-wrap { background: rgba(255,255,255,0.08); border-radius: 4px; height: 5px; overflow: hidden; margin-bottom: 6px; }
+.mr-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #165DFF, #36D399); transition: width 0.9s cubic-bezier(.4,0,.2,1); }
+.mr-pct { font-size: 12px; font-weight: 700; color: #36D399; }
+.mr-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 10px; }
+.mr-tags span {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px;
+  background: rgba(54,211,153,0.08); border: 1px solid rgba(54,211,153,0.2); color: rgba(54,211,153,0.8);
+}
+
+/* ===== 滚动指示 ===== */
+.scroll-indicator {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fade-in 1s ease 1.5s forwards;
+}
+.scroll-indicator .si-text { font-size: 11px; letter-spacing: 2px; color: rgba(232,240,254,0.4); text-transform: uppercase; }
+.scroll-dot {
+  width: 24px; height: 40px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex; justify-content: center; padding-top: 6px;
+}
+.scroll-dot::after {
+  content: '';
+  width: 4px; height: 8px;
+  background: #36D399; border-radius: 2px;
+  animation: scrollDown 2s infinite;
+}
+@keyframes scrollDown {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(14px); opacity: 0; }
+}
+
+/* ===== 入场动画 观察者 ===== */
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay1 { transition-delay: 0.1s; }
+.reveal-delay2 { transition-delay: 0.2s; }
+.reveal-delay3 { transition-delay: 0.3s; }
+.reveal-delay4 { transition-delay: 0.4s; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 1200px) {
+  /* 中等屏幕：缩减导航链接间距 */
+  .nav-links { gap: 0; }
+  .nav-link { padding: 7px 10px; font-size: 13px; }
+}
+@media (max-width: 1024px) {
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .about-float-badge.b2 { display: none; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .modal-assess-grid { grid-template-columns: 1fr; }
+  .modal-result-grid { grid-template-columns: repeat(2,1fr); }
+  .tab-pane-content.active { grid-template-columns: 1fr; }
+  .tab-visual { display: none; }
+  /* 1024px以下：隐藏导航内联联系信息，保留CTA按钮 */
+  .nav-contact-inline { display: none; }
+}
+@media (max-width: 768px) {
+  .hero-title { font-size: 36px; }
+  .nav-links { display: none; }
+  .nav-contact-inline { display: none; }
+  .services-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .modal-result-grid { grid-template-columns: repeat(2,1fr); }
+  .modal-body { padding: 20px; }
+  .hero-float-cards { display: none; }
+  /* 预算卡三栏响应式 */
+  .mbc-layout { flex-direction: column; gap: 16px; }
+  .mbc-text-zone, .mbc-emoji-zone, .mbc-bar-area {
+    flex: none;
+    width: 100%;
+  }
+  .mbc-text-zone { min-height: 70px; }
+  .mbc-emoji-zone { height: 100px; }
+  .mbc-emoji { font-size: 56px; }
+  .mbc-num { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 粒子背景画布 -->
+<canvas id="particle-canvas"></canvas>
+
+<div id="app">
+
+<!-- ===== 导航栏 ===== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <!-- Logo -->
+    <a href="index.html" class="nav-logo" style="flex-shrink:0;">
+      <div class="logo-globe-new">🎓</div>
+      <div class="logo-texts">
+        <div class="logo-title-new">留学<span>规划</span></div>
+        <div class="logo-sub-new">One-Stop Solution</div>
+      </div>
+    </a>
+    <!-- 导航链接 -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">主页</a>
+      <a href="在线云校验.html" class="nav-link">在线云校验</a>
+      <a href="互助中心服务.html" class="nav-link">互助中心</a>
+      <a href="世界机会自选.html" class="nav-link">院校机遇一览</a>
+      <a href="智能留学规划.html" class="nav-link">智能留学规划</a>
+    </div>
+    <!-- 右侧：CTA 按钮 + 联系信息（电话/邮箱上下排列） -->
+    <div class="nav-right-group">
+      <button class="nav-cta" onclick="openModal()">✦ 立即AI测评</button>
+      <div class="nav-contact-inline">
+        <span class="nc-phone">📞 020-37512006 / 020-87990713</span>
+        <a class="nc-email" href="mailto:zjxybgs@scauzj.edu.cn">✉ zjxybgs@scauzj.edu.cn</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Hero区 ===== -->
+<section id="hero">
+  <!-- 背景光晕 -->
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-bg-orb orb3"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">✦ AI 智能驱动 · 精准留学匹配</div>
+
+    <h1 class="hero-title">
+      开启你的<br>
+      <span class="grad">全球留学新征程</span>
+    </h1>
+
+    <p class="hero-sub">
+      <strong>AI智能四维测评</strong>，1分钟找到最适合你的留学方向<br>
+      精准匹配院校 · 智能规划路径 · 全程专业护航
+    </p>
+
+    <div class="hero-buttons">
+      <button class="hero-btn-primary" onclick="openModal()">
+        <span>✦ 立即开始AI测评</span>
+        <span class="arrow">→</span>
+      </button>
+      <a href="#about" class="hero-btn-secondary">了解更多 ↓</a>
+    </div>
+
+    <!-- 数据卡 -->
+    <div class="hero-float-cards">
+      <div class="hero-stat-card">
+        <div class="hero-stat-num">8+</div>
+        <div class="hero-stat-label">主流留学目的地</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-num">4维</div>
+        <div class="hero-stat-label">精准测评维度</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-num">1min</div>
+        <div class="hero-stat-label">快速获取结果</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-num">99%</div>
+        <div class="hero-stat-label">用户满意度</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 滚动指示 -->
+  <div class="scroll-indicator">
+    <div class="scroll-dot"></div>
+    <span class="si-text">Scroll</span>
+  </div>
+</section>
+
+<!-- ===== 核心服务区 ===== -->
+<section id="services">
+  <div class="reveal">
+    <div class="section-badge">✦ 核心服务</div>
+    <h2 class="section-title">一站式留学服务平台<br><span class="grad">四大核心功能</span></h2>
+    <p class="section-sub">从测评定位到院校匹配，从在线校验到智能规划，全流程覆盖你的留学需求</p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay1" style="--card-color1:#165DFF;--card-color2:#36D399;--card-border:rgba(54,211,153,0.4);--card-glow:rgba(54,211,153,0.2);--card-accent:#36D399;" onclick="openModal()">
+      <div class="card-icon" style="background:linear-gradient(135deg,rgba(22,93,255,0.3),rgba(54,211,153,0.2));">🤖</div>
+      <div class="card-title">AI 智能测评</div>
+      <div class="card-desc">四维精准测评算法，综合职业规划、生活偏好、学业挑战、文化适应能力与预算，智能匹配最适合你的留学目的地。</div>
+      <div class="card-link" style="--card-accent:#36D399">开始测评 →</div>
+    </div>
+
+    <a href="世界机会自选.html" class="service-card reveal reveal-delay2" style="--card-color1:#99BF38;--card-color2:#2FADDE;--card-border:rgba(153,191,56,0.4);--card-glow:rgba(153,191,56,0.2);--card-accent:#99BF38;">
+      <div class="card-icon" style="background:linear-gradient(135deg,rgba(153,191,56,0.3),rgba(47,173,222,0.2));">🌏</div>
+      <div class="card-title">院校机遇一览</div>
+      <div class="card-desc">全球热门院校深度解析，覆盖英国、澳洲、新加坡等主流目的地，助你精准择校定位。</div>
+      <div class="card-link">探索院校 →</div>
+    </a>
+
+    <a href="在线云校验.html" class="service-card reveal reveal-delay3" style="--card-color1:#2FADDE;--card-color2:#165DFF;--card-border:rgba(47,173,222,0.4);--card-glow:rgba(47,173,222,0.2);--card-accent:#2FADDE;">
+      <div class="card-icon" style="background:linear-gradient(135deg,rgba(47,173,222,0.3),rgba(22,93,255,0.2));">✅</div>
+      <div class="card-title">在线云校验</div>
+      <div class="card-desc">实时验证申请材料合规性，快速识别问题文件，确保申请资料符合目标院校要求。</div>
+      <div class="card-link">立即校验 →</div>
+    </a>
+
+    <a href="互助中心服务.html" class="service-card reveal reveal-delay4" style="--card-color1:#f093fb;--card-color2:#f5576c;--card-border:rgba(240,147,251,0.3);--card-glow:rgba(240,147,251,0.15);--card-accent:#f093fb;">
+      <div class="card-icon" style="background:linear-gradient(135deg,rgba(240,147,251,0.25),rgba(245,87,108,0.15));">🤝</div>
+      <div class="card-title">互助交流中心</div>
+      <div class="card-desc">汇聚学长学姐真实经验、导师专业建议与同路人互助，在留学路上不孤单，共同前行。</div>
+      <div class="card-link">加入社区 →</div>
+    </a>
+  </div>
+</section>
+
+<!-- ===== 关于我们区 ===== -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-visual reveal">
+      <div class="about-img-wrap" style="height:380px;">
+        <img src="img/1.jpg" alt="关于我们" style="width:100%;height:100%;object-fit:cover;" class="about-bg-img" id="aboutBgImg">
+        <img src="" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s ease;" class="about-fade-img" id="aboutFadeImg">
+        <div class="about-img-overlay"></div>
+      </div>
+      <div class="about-float-badge b1">
+        <div class="badge-num">500+</div>
+        <div class="badge-txt">成功案例</div>
+      </div>
+      <div class="about-float-badge b2">
+        <div class="badge-num">98%</div>
+        <div class="badge-txt">申请成功率</div>
+      </div>
+    </div>
+    <div class="about-text reveal reveal-delay2">
+      <div class="section-badge">✦ 关于我们</div>
+      <h2 class="section-title" style="font-size:clamp(24px,3vw,40px);">专注一站式留学<br><span class="grad">精准高效全程护航</span></h2>
+      <p class="section-sub">本业务专注提供一站式专业留学服务，依托精准数据与资深经验，为用户高效匹配优质院校与专业，科学规避申请误区。同时搭建线上留学互助交流中心，汇聚同路申请者、在读学长学姐与行业导师，实现信息互通、经验共享与疑问解答。</p>
+      <p class="section-sub" style="margin-top:12px;">此外，我们还提供个性化智能留学规划，从背景提升、时间安排到申请指导全流程跟进，一站式满足学生选校定位、路径规划、互助交流等多元留学需求，让留学准备更清晰、更省心、更有方向。</p>
+
+      <div class="about-list">
+        <div class="about-list-col">
+          <h6>热门国家</h6>
+          <div class="country-rank-list">
+            <div class="country-rank-item" data-country="US" onclick="switchCountrySchool('US')"><span class="cr-rank top3">1</span><div class="cr-content"><div class="cr-name">美国</div><div class="cr-desc">QS前100数量断层领先，哈佛、MIT、斯坦福、加州理工等世界级名校扎堆，科研与就业全球天花板。</div></div></div>
+            <div class="country-rank-item" data-country="GB" onclick="switchCountrySchool('GB')"><span class="cr-rank top3">2</span><div class="cr-content"><div class="cr-name">英国</div><div class="cr-desc">G5精英+红砖大学阵容极强，牛津、剑桥、帝国理工、LSE稳居前列，学制短、认可度全球通用。</div></div></div>
+            <div class="country-rank-item" data-country="AU" onclick="switchCountrySchool('AU')"><span class="cr-rank top3">3</span><div class="cr-content"><div class="cr-name">澳大利亚</div><div class="cr-desc">澳洲八大全部进入QS前100，名校密度极高，环境宜居，申请友好，性价比突出。</div></div></div>
+            <div class="country-rank-item" data-country="DE" onclick="switchCountrySchool('DE')"><span class="cr-rank">4</span><div class="cr-content"><div class="cr-name">德国</div><div class="cr-desc">工科霸主，慕尼黑工大、亚琛工大、柏林工业大学实力顶尖，公立大学低学费/免学费。</div></div></div>
+            <div class="country-rank-item" data-country="CA" onclick="switchCountrySchool('CA')"><span class="cr-rank">5</span><div class="cr-content"><div class="cr-name">加拿大</div><div class="cr-desc">麦吉尔、多伦多大学、UBC 稳居世界百强，教育质量高、社会稳定，移民政策友好。</div></div></div>
+            <div class="country-rank-item" data-country="FR" onclick="switchCountrySchool('FR')"><span class="cr-rank">6</span><div class="cr-content"><div class="cr-name">法国</div><div class="cr-desc">巴黎文理、索邦大学、巴黎理工学院学术顶尖，高商与工程师院校世界闻名。</div></div></div>
+            <div class="country-rank-item" data-country="KR" onclick="switchCountrySchool('KR')"><span class="cr-rank">7</span><div class="cr-content"><div class="cr-name">韩国</div><div class="cr-desc">SKY联盟（首尔大、延世大、高丽大）亚洲顶尖，IT、传媒、设计专业强势。</div></div></div>
+            <div class="country-rank-item" data-country="SG" onclick="switchCountrySchool('SG')"><span class="cr-rank">8</span><div class="cr-content"><div class="cr-name">新加坡</div><div class="cr-desc">新加坡国立、南洋理工稳居全球前20，亚洲学术中心，全英文教学，国际化拉满。</div></div></div>
+            <div class="country-rank-item" data-country="NL" onclick="switchCountrySchool('NL')"><span class="cr-rank">9</span><div class="cr-content"><div class="cr-name">荷兰</div><div class="cr-desc">代尔夫特理工、阿姆斯特丹大学、莱顿大学排名稳定，工科、社科、农业学科极强。</div></div></div>
+            <div class="country-rank-item" data-country="JP" onclick="switchCountrySchool('JP')"><span class="cr-rank">10</span><div class="cr-content"><div class="cr-name">日本</div><div class="cr-desc">东京大学、京都大学亚洲老牌顶级名校，理工科、材料、机器人领域世界领先。</div></div></div>
+          </div>
+        </div>
+        <div class="about-list-col">
+          <h6 id="schoolListTitle">热门院校</h6>
+          <div class="country-rank-list" id="schoolRankList">
+            <!-- 院校列表由JS动态渲染 -->
+          </div>
+        </div>
+      </div>
+      <div class="contact-info">
+        <p>📞 联系电话：<strong>020-37512006 / 020-87990713</strong></p>
+        <p>📍 联系地址：<strong>华南农业大学珠江学院行政楼1-101</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 服务Tab区 ===== -->
+<section id="service-section">
+  <div class="reveal" style="text-align:center;margin-bottom:12px;">
+    <div class="section-badge">✦ 专题资讯</div>
+    <h2 class="section-title">探索留学全领域<br><span class="grad">四大专题深度解析</span></h2>
+  </div>
+  <div class="tabs-header reveal">
+    <button class="tab-btn active" onclick="switchTab(this,'tab-hotcountry')">
+      <span class="tab-icon">🌍</span> 热门国家
+    </button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-mutual')">
+      <span class="tab-icon">🤝</span> 互助中心
+    </button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-school')">
+      <span class="tab-icon">🏫</span> 热门院校
+    </button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-ai')">
+      <span class="tab-icon">🤖</span> 智能留学规划
+    </button>
+  </div>
+
+  <div id="tab-hotcountry" class="tab-pane-content active reveal">
+    <div class="tab-visual">
+      <div class="tab-big-icon">🌍</div>
+      <h4>全球留学目的地</h4>
+      <p>英国 · 澳大利亚 · 新加坡 · 加拿大 · 美国 · 德国 · 日本 · 新西兰</p>
+    </div>
+    <div class="tab-body">
+      <h3>热门留学国家全解析</h3>
+      <p>本专题围绕当前主流留学国家，全面梳理海外求学过程中的重要事项与实用信息。内容涵盖各国留学政策要点、安全规范与注意事项，境外生活适应指南、特色景点与文化体验介绍，以及行前必备物品清单与出行规划建议。</p>
+      <p>同时系统梳理各国主要留学申请周期与关键时间节点，为计划出国留学的学生及家庭提供权威、清晰、系统化的参考依据，助力科学规划、稳妥筹备。</p>
+      <div class="tab-tags"><span class="tab-tag">签证政策</span><span class="tab-tag">生活费用</span><span class="tab-tag">申请节点</span><span class="tab-tag">文化体验</span><span class="tab-tag">安全指南</span></div>
+    </div>
+  </div>
+
+  <div id="tab-mutual" class="tab-pane-content reveal">
+    <div class="tab-visual">
+      <div class="tab-big-icon">🤝</div>
+      <h4>海外升学互助社区</h4>
+      <p>学长学姐经验 · 导师专业指导 · 同路人互助答疑</p>
+    </div>
+    <div class="tab-body">
+      <h3>互助交流中心</h3>
+      <p>本专题聚焦在校学子海外升学全流程指导，汇聚海内外优秀学长学姐真实升学经验与备考心得，整合本校导师专业规划建议与申请策略。内容覆盖院校选择、文书撰写、背景提升、面试技巧、时间管理等核心环节。</p>
+      <p>同时开设海外升学互助交流论坛，搭建学子、学长学姐与专业导师之间的沟通桥梁，形成开放、务实、互助的升学交流氛围。</p>
+      <div class="tab-tags"><span class="tab-tag">文书指导</span><span class="tab-tag">背景提升</span><span class="tab-tag">面试技巧</span><span class="tab-tag">经验分享</span><span class="tab-tag">互助答疑</span></div>
+    </div>
+  </div>
+
+  <div id="tab-school" class="tab-pane-content reveal">
+    <div class="tab-visual">
+      <div class="tab-big-icon">🏛️</div>
+      <h4>全球顶尖院校库</h4>
+      <p>综合类 · 理工类 · 人文社科 · 艺术设计</p>
+    </div>
+    <div class="tab-body">
+      <h3>热门院校深度解析</h3>
+      <p>本专题聚焦全球热门院校，系统呈现顶尖学府与特色院校的核心信息。内容涵盖院校历史底蕴、办学定位、学科优势、师资力量、科研平台、人才培养特色、国际声誉与行业认可度。</p>
+      <p>专题以清晰维度梳理院校核心数据与关键信息，同步呈现招生政策、录取要求、专业设置、校园文化与就业前景，帮助申请者快速对比院校差异、明确择校方向。</p>
+      <div class="tab-tags"><span class="tab-tag">院校排名</span><span class="tab-tag">录取要求</span><span class="tab-tag">专业设置</span><span class="tab-tag">就业前景</span><span class="tab-tag">校园文化</span></div>
+    </div>
+  </div>
+
+  <div id="tab-ai" class="tab-pane-content reveal">
+    <div class="tab-visual">
+      <div class="tab-big-icon">🤖</div>
+      <h4>AI 智能规划引擎</h4>
+      <p>个性化 · 全流程 · 精准定位</p>
+    </div>
+    <div class="tab-body">
+      <h3>智能留学规划</h3>
+      <p>本专题推出智能留学规划服务，以线上问卷调研为核心形式，全面收集学生学术背景、语言水平、专业意向、留学国家偏好及职业发展规划等关键信息。依托系统化数据整合与科学评估模型，为学生精准匹配适配的留学国家、院校层次与专业方向。</p>
+      <p>通过智能问卷与智能分析相结合，为不同阶段学子提供定制化路径建议，涵盖时间安排、背景提升、语言备考、申请节点及材料准备等全流程指引。</p>
+      <div class="tab-tags"><span class="tab-tag">智能匹配</span><span class="tab-tag">背景评估</span><span class="tab-tag">路径规划</span><span class="tab-tag">全程跟进</span><span class="tab-tag">个性定制</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 评价区 ===== -->
+<section id="testimonial">
+  <div class="testimonial-inner reveal">
+    <div class="section-badge" style="display:inline-block;margin-bottom:16px;">✦ 用户评价</div>
+    <div class="testimonial-track" id="testimonialTrack">
+      <div class="testimonial-slide active">
+        <div class="testimonial-text">"通过AI测评，准确发现我最适合新加坡的金融专业方向。顾问团队全程跟进，文书质量很高，最终顺利拿到NTU的offer！"</div>
+        <div class="testimonial-author">— 李同学，南洋理工大学 金融硕士</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-text">"互助中心里的学长学姐都非常热心，分享了很多实战经验。测评系统帮我快速明确了英国留学的方向，省去了很多弯路。"</div>
+        <div class="testimonial-author">— 张同学，爱丁堡大学 商科硕士</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-text">"智能规划服务帮我梳理了完整的申请时间线和备考计划，让我对整个留学流程有了清晰认知，强烈推荐！"</div>
+        <div class="testimonial-author">— 王同学，悉尼大学 计算机硕士</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-text">"在线云校验功能帮我及时发现了材料中的问题，避免了因材料不合规而被拒申的风险，服务非常专业贴心。"</div>
+        <div class="testimonial-author">— 陈同学，昆士兰大学 工程硕士</div>
+      </div>
+    </div>
+    <div class="testimonial-dots" id="testimonialDots">
+      <button class="t-dot active" onclick="goSlide(0)"></button>
+      <button class="t-dot" onclick="goSlide(1)"></button>
+      <button class="t-dot" onclick="goSlide(2)"></button>
+      <button class="t-dot" onclick="goSlide(3)"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:14px;">
+        <div class="logo-globe-new" style="width:36px;height:36px;font-size:16px;">🎓</div>
+        <div class="logo-texts">
+          <div class="logo-title-new" style="font-size:16px;">留学<span>规划</span></div>
+          <div class="logo-sub-new">One-Stop Solution</div>
+        </div>
+      </div>
+      <p class="footer-desc">一站式专业留学服务平台，AI智能测评精准匹配最适合你的留学方向，全程专业护航。</p>
+      <p class="footer-desc" style="margin-top:10px;">📞 020-37512006 / 020-87990713<br>✉ zjxybgs@scauzj.edu.cn<br>📍 华南农业大学珠江学院行政楼1-101</p>
+    </div>
+    <div class="footer-col">
+      <h6>快速导航</h6>
+      <ul>
+        <li><a href="index.html">主页</a></li>
+        <li><a href="在线云校验.html">在线云校验</a></li>
+        <li><a href="互助中心服务.html">互助中心</a></li>
+        <li><a href="世界机会自选.html">院校机遇一览</a></li>
+        <li><a href="智能留学规划.html">智能留学规划</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>热门目的地</h6>
+      <ul>
+        <li><a href="#">英国留学</a></li>
+        <li><a href="#">澳大利亚留学</a></li>
+        <li><a href="#">新加坡留学</a></li>
+        <li><a href="#">加拿大留学</a></li>
+        <li><a href="#">美国留学</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>服务支持</h6>
+      <ul>
+        <li><a href="#">常见问题</a></li>
+        <li><a href="#">申请指南</a></li>
+        <li><a href="#">联系我们</a></li>
+        <li><a href="#">隐私政策</a></li>
+        <li><a href="#">服务条款</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 留学规划. All rights reserved. 华南农业大学珠江学院</span>
+    <div class="footer-social">
+      <a href="#" title="微信">💬</a>
+      <a href="#" title="微博">📱</a>
+      <a href="#" title="QQ">🐧</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- #app end -->
+
+
+<!-- ===== 悬浮测评弹窗 ===== -->
+<div id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div id="modal-box">
+    <!-- 弹窗顶部 -->
+    <div class="modal-header">
+      <div class="modal-header-inner">
+        <div class="modal-title-area">
+          <div class="modal-title-icon">✦</div>
+          <div>
+            <div class="modal-title">在线留学推荐 <span>智能测评</span></div>
+            <div class="modal-subtitle">四维精准测评 · AI智能匹配最优留学目的地</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal()" aria-label="关闭">✕</button>
+      </div>
+    </div>
+
+    <!-- 弹窗主体 -->
+    <div class="modal-body">
+
+      <!-- 四维测评网格 -->
+      <div class="modal-assess-grid">
+
+        <!-- 职业发展导向 -->
+        <div class="modal-assess-card">
+          <div class="mac-header">
+            <div class="mac-icon c1">💼</div>
+            <div>
+              <div class="mac-title">职业发展导向</div>
+              <div class="mac-sub">你最看重留学对职业的哪种价值？</div>
+            </div>
+          </div>
+          <div class="modal-options">
+            <input type="radio" name="career" id="mc1" value="startup">
+            <label for="mc1">创业生态</label>
+            <input type="radio" name="career" id="mc2" value="corporate">
+            <label for="mc2">跨国企业</label>
+            <input type="radio" name="career" id="mc3" value="research">
+            <label for="mc3">学术科研</label>
+            <input type="radio" name="career" id="mc4" value="pr">
+            <label for="mc4">移民定居</label>
+            <input type="radio" name="career" id="mc5" value="back">
+            <label for="mc5">回国就业</label>
+          </div>
+        </div>
+
+        <!-- 生活方式偏好 -->
+        <div class="modal-assess-card">
+          <div class="mac-header">
+            <div class="mac-icon c2">🌿</div>
+            <div>
+              <div class="mac-title">生活方式偏好</div>
+              <div class="mac-sub">你理想的海外生活是什么样的？</div>
+            </div>
+          </div>
+          <div class="modal-options">
+            <input type="radio" name="lifestyle" id="ml1" value="city">
+            <label for="ml1">都市繁华</label>
+            <input type="radio" name="lifestyle" id="ml2" value="nature">
+            <label for="ml2">自然环境</label>
+            <input type="radio" name="lifestyle" id="ml3" value="culture">
+            <label for="ml3">文化多元</label>
+            <input type="radio" name="lifestyle" id="ml4" value="safe">
+            <label for="ml4">安全宁静</label>
+            <input type="radio" name="lifestyle" id="ml5" value="social">
+            <label for="ml5">华人社群</label>
+          </div>
+        </div>
+
+        <!-- 学业挑战意愿 -->
+        <div class="modal-assess-card">
+          <div class="mac-header">
+            <div class="mac-icon c3">📚</div>
+            <div>
+              <div class="mac-title">学业挑战意愿</div>
+              <div class="mac-sub">你对学业压力与节奏的接受度？</div>
+            </div>
+          </div>
+          <div class="modal-options">
+            <input type="radio" name="study" id="ms1" value="intense">
+            <label for="ms1">高强度冲刺</label>
+            <input type="radio" name="study" id="ms2" value="balanced">
+            <label for="ms2">张弛有度</label>
+            <input type="radio" name="study" id="ms3" value="relaxed">
+            <label for="ms3">轻松为主</label>
+            <input type="radio" name="study" id="ms4" value="practical">
+            <label for="ms4">注重实操</label>
+          </div>
+        </div>
+
+        <!-- 文化适应能力 -->
+        <div class="modal-assess-card">
+          <div class="mac-header">
+            <div class="mac-icon c4">🌐</div>
+            <div>
+              <div class="mac-title">文化适应能力</div>
+              <div class="mac-sub">面对全新文化环境，你会如何应对？</div>
+            </div>
+          </div>
+          <div class="modal-options">
+            <input type="checkbox" name="culture" id="mcu1" value="lang">
+            <label for="mcu1">语言自信</label>
+            <input type="checkbox" name="culture" id="mcu2" value="alone">
+            <label for="mcu2">独立生活</label>
+            <input type="checkbox" name="culture" id="mcu3" value="open">
+            <label for="mcu3">开放交友</label>
+            <input type="checkbox" name="culture" id="mcu4" value="food">
+            <label for="mcu4">饮食包容</label>
+            <input type="checkbox" name="culture" id="mcu5" value="custom">
+            <label for="mcu5">保持华人习惯</label>
+          </div>
+        </div>
+
+      </div><!-- end modal-assess-grid -->
+
+      <!-- 预算卡 - 三栏布局：左30%文案 + 中30%emoji + 右40%柱状图 -->
+      <div class="modal-budget-card">
+        <div class="mbc-layout">
+          <!-- 左栏30%：动态文案推荐区 -->
+          <div class="mbc-text-zone" id="mbcTextZone">
+            <div class="mtz-label">📌 方案推荐</div>
+            <div class="mtz-content" id="mtzContent">
+              <span class="mtz-text" id="mtzText"></span><span class="mtz-cursor">|</span>
+            </div>
+          </div>
+          
+          <!-- 中栏30%：emoji展示区 -->
+          <div class="mbc-emoji-zone">
+            <div class="mbc-emoji-wrap" id="mbcEmojiWrap">
+              <div class="mbc-emoji float" id="mbcEmoji">😄</div>
+              <div class="emoji-eyes" id="emojiEyes">
+                <div class="emoji-eye"><div class="eye-ball"></div></div>
+                <div class="emoji-eye"><div class="eye-ball"></div></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 右栏40%：柱状图+数值区 -->
+          <div class="mbc-bar-area">
+            <div class="mbc-top">
+              <div class="mbc-label">💰 总预算上限（人民币）</div>
+              <div class="mbc-display">
+                <span class="mbc-num" id="mbcNum">10</span>
+                <span class="mbc-unit">万</span>
+              </div>
+            </div>
+            <!-- 创意虚线平面直角坐标系（仅纵轴） -->
+            <div class="mbc-coordinate" id="mbcCoordinate">
+              <div class="mbc-y-axis"></div>
+              <div class="mbc-y-labels">
+                <span>150万+</span>
+                <span>100万</span>
+                <span>50万</span>
+                <span>10万</span>
+              </div>
+              <!-- 柱状图可拖拽区域 -->
+              <div class="mbc-bar-wrapper" id="mbcBarWrapper">
+                <div class="mbc-bar" id="mbcBar" style="height: 20px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 档位徽标 -->
+        <div id="mbcTierBadge" class="mbc-tier mt-economy">
+          <span>⭐</span><span id="mbcTierText">经济型 · 性价比之选</span>
+        </div>
+      </div>
+
+      <!-- 匹配按钮 -->
+      <div class="modal-match-btn-wrap">
+        <button class="modal-match-btn" id="modalMatchBtn" onclick="doModalMatch(event)">
+          <span class="mmb-arrow">✦</span>
+          立即匹配最适合方向
+        </button>
+      </div>
+
+      <!-- 加载动画 -->
+      <div class="modal-loading" id="modalLoading">
+        <div class="modal-loading-dots"><span></span><span></span><span></span></div>
+        <p>AI 正在智能分析中，请稍候…</p>
+      </div>
+
+      <!-- 结果展示 -->
+      <div class="modal-result" id="modalResult">
+        <div class="modal-result-header">
+          <h3>🎯 为你推荐的留学目的地</h3>
+          <p>综合四维测评结果与预算区间精准匹配</p>
+        </div>
+        <div class="modal-result-grid" id="modalResultGrid"></div>
+      </div>
+
+    </div><!-- end modal-body -->
+  </div><!-- end modal-box -->
+</div><!-- end modal-overlay -->
+
+
+<!-- ===== 核心 JavaScript ===== -->
+<script>
+/* ========================================
+   粒子背景系统
+======================================== */
+(function(){
+  var canvas = document.getElementById('particle-canvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, particles = [], mouse = { x: -9999, y: -9999 };
+  var COLORS = ['rgba(22,93,255,0.6)','rgba(54,211,153,0.5)','rgba(153,191,56,0.4)','rgba(47,173,222,0.45)'];
+
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // 鼠标跟随
+  document.addEventListener('mousemove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; });
+
+  // 生成粒子
+  for(var i=0; i<90; i++){
+    particles.push({
+      x: Math.random()*W, y: Math.random()*H,
+      r: Math.random()*2 + 0.5,
+      vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4,
+      color: COLORS[Math.floor(Math.random()*COLORS.length)],
+      alpha: Math.random()*0.5+0.2
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // 粒子
+    particles.forEach(function(p){
+      // 鼠标引力
+      var dx = mouse.x - p.x, dy = mouse.y - p.y;
+      var dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist < 120){ p.vx += dx*0.00008; p.vy += dy*0.00008; }
+
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= 0.99; p.vy *= 0.99;
+      if(p.x<0) p.x=W; if(p.x>W) p.x=0;
+      if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.fill();
+    });
+
+    // 连线
+    ctx.globalAlpha = 1;
+    for(var i=0; i<particles.length; i++){
+      for(var j=i+1; j<particles.length; j++){
+        var dx = particles[i].x-particles[j].x;
+        var dy = particles[i].y-particles[j].y;
+        var d = Math.sqrt(dx*dx+dy*dy);
+        if(d<100){
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(54,211,153,' + (0.12*(1-d/100)) + ')';
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ========================================
+   导航栏滚动吸顶
+======================================== */
+var navbar = document.getElementById('navbar');
+window.addEventListener('scroll', function(){
+  if(window.scrollY > 60){
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+/* ========================================
+   滚动入场动画 (IntersectionObserver)
+======================================== */
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+
+/* ========================================
+   Tab 切换
+======================================== */
+function switchTab(btn, tabId){
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-pane-content').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  var pane = document.getElementById(tabId);
+  pane.classList.add('active');
+}
+
+/* ========================================
+   评价轮播
+======================================== */
+var slideIdx = 0;
+function goSlide(idx){
+  var slides = document.querySelectorAll('.testimonial-slide');
+  var dots   = document.querySelectorAll('.t-dot');
+  slides.forEach(function(s){ s.classList.remove('active'); });
+  dots.forEach(function(d){ d.classList.remove('active'); });
+  slides[idx].classList.add('active');
+  dots[idx].classList.add('active');
+  slideIdx = idx;
+}
+setInterval(function(){ goSlide((slideIdx+1)%4); }, 4000);
+
+/* ========================================
+   弹窗控制
+======================================== */
+var modalOpen = false;
+function openModal(){
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modalOpen = true;
+  // 初始化预算为10万
+  updateModalBudget(10);
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  modalOpen = false;
+}
+function handleOverlayClick(e){
+  if(e.target === document.getElementById('modal-overlay')){ closeModal(); }
+}
+// ESC 键关闭
+document.addEventListener('keydown', function(e){ if(e.key==='Escape' && modalOpen) closeModal(); });
+
+/* ========================================
+   预算柱状图拖拽 + 动态emoji逻辑（弹窗版） - 三栏布局
+======================================== */
+// 预算范围：10万 ~ 150万+
+var minBudget = 10;
+var maxBudget = 150;
+var currentBudget = 10;
+
+// 档位文案配置
+var tierMessages = {
+  economy: '高性价比留学方案✨ 东南亚/欧洲小众院校，低成本高回报',
+  standard: '黄金性价比方案🎯 英国/澳洲/新西兰主流院校，平衡预算与名校',
+  premium: '精英名校方案🚀 英美澳加TOP院校，全球顶尖教育资源',
+  elite: '全球顶配方案💎 藤校/G5/新加坡国立，定制化高端留学服务'
+};
+
+// 打字机状态
+var typeState = {
+  currentText: '',
+  displayText: '',
+  charIndex: 0,
+  isTyping: false,
+  timeoutId: null
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  initBarChart();
+  // 初始打字机效果
+  startTypewriter(tierMessages.economy);
+});
+
+/* ========================================
+   创意虚线坐标系 + 柱状图拖拽 + 动态emoji + 眼球追踪
+======================================== */
+function initBarChart() {
+  var barWrapper = document.getElementById('mbcBarWrapper');
+  var bar = document.getElementById('mbcBar');
+  var emojiWrap = document.getElementById('mbcEmojiWrap');
+  var emoji = document.getElementById('mbcEmoji');
+  var eyes = document.getElementById('emojiEyes');
+  var coordinate = document.getElementById('mbcCoordinate');
+  
+  var isDragging = false;
+  var startY, startHeight;
+  var maxBarHeight = 180;
+  var minBarHeight = 20;
+
+  // 初始位置
+  updateBarFromBudget(currentBudget);
+
+  // ===== 柱状图拖拽（直接拖动柱体） =====
+  bar.addEventListener('mousedown', function(e){
+    isDragging = true;
+    bar.classList.add('dragging');
+    startY = e.clientY;
+    startHeight = bar.offsetHeight;
+    e.preventDefault();
+  });
+  
+  document.addEventListener('mousemove', function(e){
+    if(!isDragging) return;
+    var deltaY = startY - e.clientY;
+    var newHeight = startHeight + deltaY;
+    newHeight = Math.max(minBarHeight, Math.min(maxBarHeight, newHeight));
+    bar.style.height = newHeight + 'px';
+    
+    // 计算预算
+    currentBudget = Math.round(((newHeight - minBarHeight) / (maxBarHeight - minBarHeight)) * (maxBudget - minBudget) + minBudget);
+    if(currentBudget > 150) currentBudget = 151;
+    updateBudgetUI(currentBudget);
+    e.preventDefault();
+  });
+  
+  document.addEventListener('mouseup', function(){
+    if(isDragging) {
+      isDragging = false;
+      bar.classList.remove('dragging');
+    }
+  });
+
+  // 触摸支持
+  bar.addEventListener('touchstart', function(e){
+    isDragging = true;
+    bar.classList.add('dragging');
+    startY = e.touches[0].clientY;
+    startHeight = bar.offsetHeight;
+    e.preventDefault();
+  });
+  
+  document.addEventListener('touchmove', function(e){
+    if(!isDragging) return;
+    var deltaY = startY - e.touches[0].clientY;
+    var newHeight = startHeight + deltaY;
+    newHeight = Math.max(minBarHeight, Math.min(maxBarHeight, newHeight));
+    bar.style.height = newHeight + 'px';
+    currentBudget = Math.round(((newHeight - minBarHeight) / (maxBarHeight - minBarHeight)) * (maxBudget - minBudget) + minBudget);
+    if(currentBudget > 150) currentBudget = 151;
+    updateBudgetUI(currentBudget);
+    e.preventDefault();
+  });
+  
+    document.addEventListener('touchend', function(){
+      if(isDragging) {
+        isDragging = false;
+        bar.classList.remove('dragging');
+      }
+    });
+
+  // ===== 全局眼球追踪（优化版 - 精准丝滑） =====
+  // 使用requestAnimationFrame实现60fps丝滑动画
+  var eyeTracking = {
+    targetX: 0,
+    targetY: 0,
+    currentX: 0,
+    currentY: 0,
+    maxMove: 6,
+    isActive: false,
+    animationId: null
+  };
+
+  function updateEyePosition() {
+    // 缓动插值，平滑跟随
+    eyeTracking.currentX += (eyeTracking.targetX - eyeTracking.currentX) * 0.15;
+    eyeTracking.currentY += (eyeTracking.targetY - eyeTracking.currentY) * 0.15;
+    
+    var eyeBalls = document.querySelectorAll('.eye-ball');
+    eyeBalls.forEach(function(ball){
+      ball.style.transform = 'translate(' + eyeTracking.currentX + 'px, ' + eyeTracking.currentY + 'px)';
+    });
+    
+    if(eyeTracking.isActive) {
+      eyeTracking.animationId = requestAnimationFrame(updateEyePosition);
+    }
+  }
+
+  document.addEventListener('mousemove', function(e){
+    var eyesVisible = eyes.classList.contains('visible');
+    if(!eyesVisible) return;
+    
+    eyeTracking.isActive = true;
+    
+    // 计算相对于眼球中心的偏移
+    var rect = eyes.getBoundingClientRect();
+    var eyeCenterX = rect.left + rect.width / 2;
+    var eyeCenterY = rect.top + rect.height / 2;
+    
+    var deltaX = e.clientX - eyeCenterX;
+    var deltaY = e.clientY - eyeCenterY;
+    
+    // 限制移动范围，确保瞳孔不会移出眼白
+    var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    var maxDistance = 5;
+    
+    if(distance > maxDistance) {
+      deltaX = (deltaX / distance) * maxDistance;
+      deltaY = (deltaY / distance) * maxDistance;
+    }
+    
+    eyeTracking.targetX = deltaX;
+    eyeTracking.targetY = deltaY;
+    
+    if(!eyeTracking.animationId) {
+      eyeTracking.animationId = requestAnimationFrame(updateEyePosition);
+    }
+  });
+
+  // 鼠标移出页面时眼球回归居中
+  document.addEventListener('mouseleave', function(){
+    eyeTracking.targetX = 0;
+    eyeTracking.targetY = 0;
+  });
+
+  // ===== 鼠标离开emoji区域时眼球回正 =====
+  emojiWrap.addEventListener('mouseleave', function(){
+    eyeTracking.targetX = 0;
+    eyeTracking.targetY = 0;
+  });
+}
+
+// 根据预算更新柱状图高度
+function updateBarFromBudget(budget) {
+  var bar = document.getElementById('mbcBar');
+  var maxBarHeight = 180;
+  var minBarHeight = 20;
+  var h = ((budget - minBudget) / (maxBudget - minBudget)) * (maxBarHeight - minBarHeight) + minBarHeight;
+  h = Math.max(minBarHeight, Math.min(maxBarHeight, h));
+  bar.style.height = h + 'px';
+}
+
+// 更新预算UI（数字+档位+emoji+文案）
+function updateBudgetUI(budget) {
+  var el = document.getElementById('mbcNum');
+  var oldVal = el.textContent;
+  var newVal = budget > 150 ? '150+' : budget;
+  el.textContent = newVal;
+  
+  // 数字跳动动画
+  if(oldVal !== String(newVal)) {
+    el.classList.remove('bounce');
+    void el.offsetWidth; // 触发重绘
+    el.classList.add('bounce');
+  }
+  
+  // 更新档位徽标
+  var badge = document.getElementById('mbcTierBadge');
+  var tierText = document.getElementById('mbcTierText');
+  var newMessage = '';
+  badge.className = 'mbc-tier';
+  if(budget <= 50) {
+    badge.classList.add('mt-economy');
+    tierText.textContent = '经济型 · 性价比之选';
+    newMessage = tierMessages.economy;
+    el.style.color = '#27ae60';
+  } else if(budget <= 100) {
+    badge.classList.add('mt-standard');
+    tierText.textContent = '标准型 · 主流留学预算';
+    newMessage = tierMessages.standard;
+    el.style.color = '#36D399';
+  } else if(budget <= 150) {
+    badge.classList.add('mt-premium');
+    tierText.textContent = '优质型 · 品质留学体验';
+    newMessage = tierMessages.premium;
+    el.style.color = '#e67e22';
+  } else {
+    badge.classList.add('mt-elite');
+    tierText.textContent = '精英型 · 顶级院校资源';
+    newMessage = tierMessages.elite;
+    el.style.color = '#8e44ad';
+  }
+  
+  // 更新打字机文案（仅在档位变化时触发）
+  if(typeState.currentText !== newMessage) {
+    typeState.currentText = newMessage;
+    startTypewriter(newMessage);
+  }
+  
+  // 更新emoji（带切换动画）
+  updateEmojiWithAnimation(budget);
+}
+
+// 打字机效果函数
+function startTypewriter(text) {
+  // 清除之前的计时器
+  if(typeState.timeoutId) {
+    clearTimeout(typeState.timeoutId);
+  }
+  
+  // 如果文本相同，不重新打字
+  if(typeState.displayText === text && text.length > 0) {
+    return;
+  }
+  
+  // 重置状态
+  typeState.displayText = '';
+  typeState.charIndex = 0;
+  typeState.isTyping = true;
+  
+  // 清除光标闪烁
+  var cursor = document.querySelector('.mtz-cursor');
+  if(cursor) {
+    cursor.style.animation = 'none';
+    void cursor.offsetWidth;
+    cursor.style.animation = 'cursorBlink 1s infinite';
+  }
+  
+  typeTypewriter(text);
+}
+
+function typeTypewriter(text) {
+  if(typeState.charIndex < text.length) {
+    typeState.displayText += text.charAt(typeState.charIndex);
+    document.getElementById('mtzText').textContent = typeState.displayText;
+    typeState.charIndex++;
+    typeState.timeoutId = setTimeout(function() {
+      typeTypewriter(text);
+    }, 50); // 每个字符50ms
+  } else {
+    typeState.isTyping = false;
+  }
+}
+
+// emoji平滑切换+专属微动效（升级版）
+function updateEmojiWithAnimation(budget) {
+  var emoji = document.getElementById('mbcEmoji');
+  var eyes = document.getElementById('emojiEyes');
+  var newEmoji, newClass, showEyes;
+  
+  if(budget <= 50) {
+    newEmoji = '😄';
+    newClass = 'float';
+    showEyes = false;
+  } else if(budget <= 100) {
+    newEmoji = '😁';
+    newClass = 'wiggle';
+    showEyes = false;
+  } else if(budget <= 150) {
+    newEmoji = '😮';
+    newClass = 'pulse';
+    showEyes = true;
+  } else {
+    newEmoji = '😲';
+    newClass = 'shocked';
+    showEyes = false; // 150万+档位：仅使用标准原生emoji，无独立眼球
+  }
+  
+  // 淡出 -> 切换 -> 淡入（带缩放+旋转过渡）
+  emoji.style.opacity = '0';
+  emoji.style.transform = 'scale(0.7) rotate(-15deg)';
+  emoji.style.transition = 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  
+  setTimeout(function(){
+    emoji.textContent = newEmoji;
+    emoji.className = 'mbc-emoji ' + newClass;
+    emoji.style.opacity = '1';
+    emoji.style.transform = 'scale(1) rotate(0deg)';
+    
+    if(showEyes) {
+      eyes.classList.add('visible');
+      // 档位切换时重置眼球位置
+      if(typeof eyeTracking !== 'undefined') {
+        eyeTracking.targetX = 0;
+        eyeTracking.targetY = 0;
+        eyeTracking.currentX = 0;
+        eyeTracking.currentY = 0;
+      }
+    } else {
+      eyes.classList.remove('visible');
+    }
+  }, 200);
+}
+
+// 更新emoji（无动画版本，用于初始化）
+function updateEmoji(budget) {
+  updateEmojiWithAnimation(budget);
+}
+
+// 同步旧接口（兼容）
+function updateModalBudget(val){
+  currentBudget = parseInt(val);
+  if(currentBudget > 150) currentBudget = 151;
+  updateBarFromBudget(currentBudget);
+  updateBudgetUI(currentBudget);
+}
+
+/* ========================================
+   国家匹配数据库
+======================================== */
+var countryDB = {
+  GB: { name:'英国', tags:['名校云集','快速学位','文化底蕴'], score: function(c,l,s,cu,b){
+    var sc=60;
+    if(c==='research'||c==='corporate') sc+=15;
+    if(l==='city'||l==='culture') sc+=10;
+    if(s==='intense'||s==='balanced') sc+=10;
+    if(b>=80) sc+=5;
+    return Math.min(sc,99);
+  }},
+  AU: { name:'澳大利亚', tags:['移民友好','生活质量','自然环境'], score: function(c,l,s,cu,b){
+    var sc=58;
+    if(c==='pr') sc+=20;
+    if(l==='nature'||l==='safe') sc+=12;
+    if(s==='balanced'||s==='relaxed') sc+=8;
+    if(cu&&cu.indexOf('food')>-1) sc+=5;
+    if(b>=60) sc+=5;
+    return Math.min(sc,99);
+  }},
+  SG: { name:'新加坡', tags:['亚洲金融','华人社群','高性价比'], score: function(c,l,s,cu,b){
+    var sc=55;
+    if(c==='corporate'||c==='back') sc+=18;
+    if(l==='city'||l==='social') sc+=12;
+    if(cu&&cu.indexOf('custom')>-1) sc+=10;
+    if(b>=40&&b<=180) sc+=8;
+    return Math.min(sc,99);
+  }},
+  CA: { name:'加拿大', tags:['移民政策','多元文化','优质教育'], score: function(c,l,s,cu,b){
+    var sc=56;
+    if(c==='pr'||c==='startup') sc+=16;
+    if(l==='nature'||l==='safe') sc+=10;
+    if(cu&&cu.indexOf('open')>-1) sc+=8;
+    if(b>=80) sc+=6;
+    return Math.min(sc,99);
+  }},
+  DE: { name:'德国', tags:['免学费','工程强国','严谨学风'], score: function(c,l,s,cu,b){
+    var sc=52;
+    if(c==='research'||c==='startup') sc+=18;
+    if(s==='intense') sc+=12;
+    if(b<80) sc+=12;
+    return Math.min(sc,99);
+  }},
+  JP: { name:'日本', tags:['亚洲文化','精工技艺','就业前景'], score: function(c,l,s,cu,b){
+    var sc=50;
+    if(c==='back'||c==='corporate') sc+=14;
+    if(l==='culture') sc+=12;
+    if(cu&&(cu.indexOf('food')>-1||cu.indexOf('custom')>-1)) sc+=10;
+    if(b<100) sc+=8;
+    return Math.min(sc,99);
+  }},
+  NZ: { name:'新西兰', tags:['安全宜居','生态环境','友好包容'], score: function(c,l,s,cu,b){
+    var sc=48;
+    if(l==='nature'||l==='safe') sc+=18;
+    if(s==='relaxed'||s==='balanced') sc+=12;
+    if(c==='pr') sc+=8;
+    return Math.min(sc,99);
+  }},
+  US: { name:'美国', tags:['顶尖名校','创新创业','资源丰富'], score: function(c,l,s,cu,b){
+    var sc=58;
+    if(c==='research'||c==='startup') sc+=16;
+    if(l==='city') sc+=8;
+    if(s==='intense') sc+=8;
+    if(b>=200) sc+=10;
+    return Math.min(sc,99);
+  }}
+};
+
+/* ========================================
+   匹配逻辑（弹窗版）
+======================================== */
+function doModalMatch(e){
+  // 波纹效果
+  var btn = document.getElementById('modalMatchBtn');
+  var ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  var rect = btn.getBoundingClientRect();
+  var size = Math.max(rect.width, rect.height);
+  ripple.style.cssText = 'width:'+size+'px;height:'+size+'px;left:'+(e.clientX-rect.left-size/2)+'px;top:'+(e.clientY-rect.top-size/2)+'px;';
+  btn.appendChild(ripple);
+  setTimeout(function(){ ripple.remove(); }, 700);
+
+  // 获取选项
+  var career='', lifestyle='', study='', culture=[], budget=currentBudget;
+  document.querySelectorAll('input[name="career"]').forEach(function(el){ if(el.checked) career=el.value; });
+  document.querySelectorAll('input[name="lifestyle"]').forEach(function(el){ if(el.checked) lifestyle=el.value; });
+  document.querySelectorAll('input[name="study"]').forEach(function(el){ if(el.checked) study=el.value; });
+  document.querySelectorAll('input[name="culture"]:checked').forEach(function(el){ culture.push(el.value); });
+
+  // 显示加载
+  document.getElementById('modalLoading').className = 'modal-loading show';
+  document.getElementById('modalResult').className = 'modal-result';
+  btn.style.opacity = '0.6'; btn.disabled = true;
+
+  setTimeout(function(){
+    // 计算分数
+    var results = [];
+    for(var code in countryDB){
+      var c = countryDB[code];
+      results.push({ code:code, name:c.name, tags:c.tags, score:c.score(career,lifestyle,study,culture,budget) });
+    }
+    results.sort(function(a,b){ return b.score-a.score; });
+    results = results.slice(0,4);
+
+    // 渲染结果
+    var html='';
+    results.forEach(function(r,i){
+      html += '<div class="mr-card" style="animation-delay:'+(i*0.12)+'s;">'
+        + '<span class="mr-rank r'+(i+1)+'">'+(i+1)+'</span>'
+        + '<div class="mr-code">'+r.code+'</div>'
+        + '<div class="mr-name">'+r.name+'</div>'
+        + '<div class="mr-bar-wrap"><div class="mr-bar" style="width:0%" data-w="'+r.score+'%"></div></div>'
+        + '<div class="mr-pct">匹配度 '+r.score+'%</div>'
+        + '<div class="mr-tags">'+r.tags.map(function(t){return'<span>'+t+'</span>';}).join('')+'</div>'
+        + '</div>';
+    });
+    document.getElementById('modalResultGrid').innerHTML = html;
+
+    document.getElementById('modalLoading').className = 'modal-loading';
+    document.getElementById('modalResult').className = 'modal-result show';
+    btn.style.opacity = ''; btn.disabled = false;
+
+    // 进度条动画（延迟触发）
+    setTimeout(function(){
+      document.querySelectorAll('.mr-bar').forEach(function(bar){
+        bar.style.width = bar.getAttribute('data-w');
+      });
+    }, 80);
+
+    // 滚动到结果
+    setTimeout(function(){
+      document.getElementById('modalResult').scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }, 150);
+  }, 1500);
+}
+
+/* ========================================
+   热门院校榜单切换逻辑
+======================================== */
+// 各国家Top10院校数据
+var universityData = {
+  US: [
+    { name: '哈佛大学', desc: 'QS世界第1，顶尖学者汇聚，全球最具影响力学府' },
+    { name: '斯坦福大学', desc: 'QS世界第3，硅谷创业摇篮，计算机科学全球第一' },
+    { name: 'MIT', desc: 'QS世界第1，工科与商科并重，科技创新核心引擎' },
+    { name: '加州理工', desc: 'QS世界第6，小而精科研强校，诺贝尔奖密度最高' },
+    { name: '芝加哥大学', desc: 'QS世界第10，经济学与社会学全球顶尖' },
+    { name: '宾夕法尼亚大学', desc: 'QS世界第13沃顿商学院全球第一' },
+    { name: '康奈尔大学', desc: 'QS世界第15，常春藤盟校，工程与农业领先' },
+    { name: '普林斯顿大学', desc: 'QS世界第16，基础研究见长，诺贝尔奖得主众多' },
+    { name: '耶鲁大学', desc: 'QS世界第18，文科与法学全球领先' },
+    { name: '哥伦比亚大学', desc: 'QS世界第21，纽约核心位置，商科与传媒强势' }
+  ],
+  GB: [
+    { name: '牛津大学', desc: 'QS世界第2，英语世界最古老大学，学术底蕴深厚' },
+    { name: '剑桥大学', desc: 'QS世界第3，诺贝尔奖得主全球最多' },
+    { name: '帝国理工', desc: 'QS世界第6，工科与医学全球领先' },
+    { name: '伦敦大学学院', desc: 'QS世界第9，综合学科全面强势' },
+    { name: '爱丁堡大学', desc: 'QS世界第15，苏格兰第一名校' },
+    { name: '曼彻斯特大学', desc: 'QS世界第27，材料与生物科学领先' },
+    { name: '伦敦国王学院', desc: 'QS世界第35，医学与法学知名' },
+    { name: '布里斯托大学', desc: 'QS世界第49，工程与理学优秀' },
+    { name: '华威大学', desc: 'QS世界第54，商科与经济学突出' },
+    { name: '格拉斯哥大学', desc: 'QS世界第76，历史悠久的红砖大学' }
+  ],
+  AU: [
+    { name: '墨尔本大学', desc: 'QS世界第13，澳洲第一，医学与法学领先' },
+    { name: '悉尼大学', desc: 'QS世界第18，澳洲第二，商学院全球认证' },
+    { name: 'ANU', desc: 'QS世界第30，澳洲国立，政治与物理强校' },
+    { name: '昆士兰大学', desc: 'QS世界第40，生物科学全球领先' },
+    { name: '莫纳什大学', desc: 'QS世界第57，药学与化学工程突出' },
+    { name: '新南威尔士大学', desc: 'QS世界第62，工程与商科优秀' },
+    { name: '西澳大学', desc: 'QS世界第92，矿业与海洋科学强校' },
+    { name: '阿德莱德大学', desc: 'QS世界第111，医学与工程著称' },
+    { name: '悉尼科技大学', desc: 'QS世界第133，IT与设计突出' },
+    { name: '昆士兰科技大学', desc: 'QS世界第189，商科与传播学强势' }
+  ],
+  DE: [
+    { name: '慕尼黑工大', desc: 'QS世界第50，德国第一，工科欧洲最强' },
+    { name: '亚琛工大', desc: 'QS世界第53，欧洲理工科领军' },
+    { name: '柏林工业大学', desc: 'QS世界第71，德国第三工科' },
+    { name: '卡尔斯鲁厄理工', desc: 'QS世界第99，信息与能源技术强校' },
+    { name: '柏林洪堡大学', desc: 'QS世界第117，物理与哲学发源地' },
+    { name: '海德堡大学', desc: 'QS世界第84，历史最古老大学之一' },
+    { name: '慕尼黑大学', desc: 'QS世界第63，人文与医学领先' },
+    { name: '图宾根大学', desc: 'QS世界第91，医学与自然科学优秀' },
+    { name: '弗莱堡大学', desc: 'QS世界第112，环境科学与医学突出' },
+    { name: 'KIT', desc: 'QS世界第99，综合性理工强校' }
+  ],
+  CA: [
+    { name: '多伦多大学', desc: 'QS世界第21，加拿大第一，医学与工程领先' },
+    { name: '麦吉尔大学', desc: 'QS世界第32，加拿大第二，医学强校' },
+    { name: 'UBC', desc: 'QS世界第34，加拿大第三，海洋与林业科学' },
+    { name: '阿尔伯塔大学', desc: 'QS世界第96，石油与工程强校' },
+    { name: '蒙特利尔大学', desc: 'QS世界第111，法语区最大院校' },
+    { name: '麦克马斯特大学', desc: 'QS世界第149，医学与工程著称' },
+    { name: '滑铁卢大学', desc: 'QS世界第154，计算机与数学强校' },
+    { name: '西安大略大学', desc: 'QS世界第172，医学与商科优秀' },
+    { name: '皇后大学', desc: 'QS世界第184，文科与工程著称' },
+    { name: '卡尔加里大学', desc: 'QS世界第201，石油与商科突出' }
+  ],
+  FR: [
+    { name: '巴黎文理大学', desc: 'QS世界第24，法国第一，数学与物理顶尖' },
+    { name: '索邦大学', desc: 'QS世界第36，人文与语言学领先' },
+    { name: '巴黎理工学院', desc: 'QS世界第38，工程与技术强校' },
+    { name: '巴黎高师', desc: 'QS世界第59，法国师范类最高' },
+    { name: '格勒诺布尔大学', desc: 'QS世界第71，物理与材料科学突出' },
+    { name: '蒙彼利埃大学', desc: 'QS世界第141，生命科学强校' },
+    { name: '波尔多大学', desc: 'QS世界第164，葡萄酒与工程著称' },
+    { name: '图卢兹大学', desc: 'QS世界第187，航空航天强校' },
+    { name: '里昂大学', desc: 'QS世界第177，商业与管理优秀' },
+    { name: '斯特拉斯堡大学', desc: 'QS世界第206，历史悠久的综合大学' }
+  ],
+  KR: [
+    { name: '首尔大学', desc: 'QS世界第29，韩国第一，SKY联盟之首' },
+    { name: '延世大学', desc: 'QS世界第45，医学与商科领先' },
+    { name: '高丽大学', desc: 'QS世界第56，法学与政治学强校' },
+    { name: 'KAIST', desc: 'QS世界第53，韩国科技类第一' },
+    { name: 'POSTECH', desc: 'QS世界第99，理工科著称' },
+    { name: '浦项工大', desc: 'QS世界第76，材料科学强校' },
+    { name: '成均馆大学', desc: 'QS世界第92，历史最悠久大学之一' },
+    { name: '汉阳大学', desc: 'QS世界第157，工程与设计突出' },
+    { name: '梨花女大', desc: 'QS世界第197，韩国女子最高学府' },
+    { name: '中央大学', desc: 'QS世界第244，传媒与艺术强校' }
+  ],
+  SG: [
+    { name: 'NUS', desc: 'QS世界第8，亚洲第一，综合学科顶尖' },
+    { name: 'NTU', desc: 'QS世界第15，亚洲第二，工科与商科强校' },
+    { name: 'SMU', desc: 'QS世界第89，商科与会计亚洲领先' },
+    { name: '新国立大学', desc: 'QS世界第8，与NUS并列' },
+    { name: '南洋理工大学', desc: 'QS世界第15，工科强校' },
+    { name: '新加坡理工', desc: '应用型技术教育领先' },
+    { name: '淡马锡理工', desc: 'QS世界第201，应用科学强校' },
+    { name: '新加坡管理大学', desc: 'QS世界第89，商科著称' },
+    { name: 'Kaplan高等教育', desc: '合作项目丰富' },
+    { name: 'PSB学院', desc: '澳洲纽卡斯尔大学合作' }
+  ],
+  NL: [
+    { name: '代尔夫特理工', desc: 'QS世界第48，欧洲工科强校' },
+    { name: '阿姆斯特丹大学', desc: 'QS世界第55，传媒与社会科学领先' },
+    { name: '莱顿大学', desc: 'QS世界第77，历史最古老大学之一' },
+    { name: '埃因霍温理工', desc: 'QS世界第103，理工大学著称' },
+    { name: '乌得勒支大学', desc: 'QS世界第107，医学与物理强校' },
+    { name: '格罗宁根大学', desc: 'QS世界第139，心理学与法学优秀' },
+    { name: '鹿特丹Erasmus', desc: 'QS世界第208，商学院著称' },
+    { name: '马斯特里赫特大学', desc: 'QS世界第239 problem-based learning著称' },
+    { name: '奈梅亨大学', desc: 'QS世界第214，神学与医学强校' },
+    { name: '蒂尔堡大学', desc: 'QS世界第295，商科与经济学突出' }
+  ],
+  JP: [
+    { name: '东京大学', desc: 'QS世界第23，亚洲第一，诺贝尔奖得主众多' },
+    { name: '京都大学', desc: 'QS世界第36，亚洲第二，学术自由著称' },
+    { name: '东京工业大学', desc: 'QS世界第91，工科强校' },
+    { name: '大阪大学', desc: 'QS世界第91，医学与工程著称' },
+    { name: '东北大学', desc: 'QS世界第113，材料科学强校' },
+    { name: '名古屋大学', desc: 'QS世界第120，理工科领先' },
+    { name: '北海道大学', desc: 'QS世界第141，农业与海洋科学强校' },
+    { name: '九州大学', desc: 'QS世界第158，工学与医学著称' },
+    { name: '早稻田大学', desc: 'QS世界第196，政治与商科领先' },
+    { name: '庆应义塾大学', desc: 'QS世界第197，日本私立第一' }
+  ]
+};
+
+// 国家名称映射
+var countryNames = {
+  US: '美国', GB: '英国', AU: '澳大利亚', DE: '德国',
+  CA: '加拿大', FR: '法国', KR: '韩国', SG: '新加坡',
+  NL: '荷兰', JP: '日本'
+};
+
+// 当前选中的国家
+var currentSchoolCountry = 'US';
+
+// 切换国家院校榜单
+function switchCountrySchool(countryCode) {
+  currentSchoolCountry = countryCode;
+  
+  // 更新国家列表选中状态
+  document.querySelectorAll('.country-rank-item').forEach(function(item) {
+    if(item.getAttribute('data-country') === countryCode) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+  
+  // 更新院校标题
+  document.getElementById('schoolListTitle').textContent = countryNames[countryCode] + '院校';
+  
+  // 渲染院校列表
+  renderSchoolList(countryCode);
+}
+
+// 渲染院校列表
+function renderSchoolList(countryCode) {
+  var list = document.getElementById('schoolRankList');
+  var schools = universityData[countryCode] || [];
+  
+  var html = '';
+  schools.forEach(function(school, index) {
+    var rankClass = index < 3 ? 'top3' : '';
+    html += '<div class="country-rank-item">'
+      + '<span class="cr-rank ' + rankClass + '">' + (index + 1) + '</span>'
+      + '<div class="cr-content"><div class="cr-name">' + school.name + '</div>'
+      + '<div class="cr-desc">' + school.desc + '</div></div></div>';
+  });
+  
+  list.innerHTML = html;
+}
+
+// 页面加载时默认显示美国院校
+document.addEventListener('DOMContentLoaded', function() {
+  switchCountrySchool('US');
+});
+
+/* ========================================
+   国家图片切换功能（渐隐渐显效果）
+======================================== */
+// 国家对应的图片文件名
+var countryImages = {
+  US: 'img/美国.jpg',
+  GB: 'img/英国.jpg',
+  AU: 'img/澳大利亚.jpg',
+  DE: 'img/德国.jpg',
+  CA: 'img/加拿大.jpg',
+  FR: 'img/法国.jpg',
+  KR: 'img/韩国.jpg',
+  SG: 'img/新加坡.jpg',
+  NL: 'img/荷兰.jpg',
+  JP: 'img/日本.jpg'
+};
+
+// 切换左侧图片（渐隐渐显效果）
+function switchAboutImage(countryCode) {
+  var bgImg = document.getElementById('aboutBgImg');
+  var fadeImg = document.getElementById('aboutFadeImg');
+  var targetSrc = countryImages[countryCode];
+  
+  if (!targetSrc || !fadeImg) return;
+  
+  // 设置目标图片
+  fadeImg.src = targetSrc;
+  
+  // 渐隐 -> 渐显
+  fadeImg.style.opacity = '1';
+  bgImg.style.opacity = '0';
+  
+  // 动画完成后交换图片
+  setTimeout(function() {
+    bgImg.src = targetSrc;
+    bgImg.style.opacity = '1';
+    fadeImg.style.opacity = '0';
+  }, 500);
+}
+
+// 恢复默认图片
+function restoreAboutImage() {
+  var bgImg = document.getElementById('aboutBgImg');
+  var fadeImg = document.getElementById('aboutFadeImg');
+  
+  fadeImg.style.opacity = '0';
+  bgImg.style.opacity = '1';
+  bgImg.src = 'img/1.jpg';
+}
+
+// 为热门国家列表添加鼠标悬停事件
+document.addEventListener('DOMContentLoaded', function() {
+  var countryItems = document.querySelectorAll('.country-rank-item[data-country]');
+  
+  countryItems.forEach(function(item) {
+    item.addEventListener('mouseenter', function() {
+      var countryCode = this.getAttribute('data-country');
+      switchAboutImage(countryCode);
+    });
+    
+    item.addEventListener('mouseleave', function() {
+      // 恢复默认图片
+      restoreAboutImage();
+    });
+  });
+});
+
+/* ========================================
+   初始化
+======================================== */
+updateModalBudget(10);
+initBarChart(); // 初始化柱状图
+</script>
+
+</body>
+</html>
