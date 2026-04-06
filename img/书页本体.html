@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>书本翻页效果</title>
+  <style>
+    :root {
+      --width: 59.2rem;
+      --height: 40rem;
+      --font-size: 1.2rem;
+      --animation-duration: 2s;
+    }
+    body {
+      background-color: #4f4e68;
+      height: 100%;
+      overflow: hidden;
+    }
+    .book {
+      position: absolute;
+      top: 0; bottom: 0; left: 0; right: 0; margin: auto;
+      width: var(--width); height: var(--height); perspective: 70rem;
+    }
+    .coverEnd { right: -0.5rem !important; }
+    .cover {
+      background-color: #36354e; transform: rotateY(0deg);
+      width: calc(var(--width) / 2); height: var(--height); overflow: hidden;
+    }
+    .cover-image {
+      width: 100%; height: 100%; object-fit: cover; pointer-events: none;
+      position: absolute; top: 0; left: 0; z-index: 0; opacity: 0.8;
+    }
+    .cover-title {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none; background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00);
+      background-clip: text; -webkit-background-clip: text; color: transparent;
+      font-size: 2rem; font-weight: bold; text-align: center; z-index: 1; width: 100%;
+    }
+    .page {
+      width: calc(var(--width) / 2 - 0.5rem); height: calc(var(--height) - 0.5rem);
+      background-color: #e9e6c4; transform: rotateY(0deg); text-align: right;
+      font-size: var(--font-size); color: #777; font-family: monospace;
+      overflow: hidden; text-indent: 2em;
+    }
+    .page::after {
+      display: block; content: ""; position: absolute;
+      top: calc(var(--font-size) * 2); left: 1rem; right: 1rem; bottom: 1rem;
+      background-image: linear-gradient(to bottom, currentColor 1px, transparent 1px);
+      background-size: 100% calc(var(--font-size) + 0.55rem); opacity: 1; pointer-events: none;
+    }
+    .cover, .page {
+      position: absolute; padding-top: 1rem; transform-origin: 0 0;
+      border-radius: 5px 0 0 5px;
+      box-shadow: inset 3px 0px 20px rgba(0,0,0,0.2), 0px 0px 15px rgba(0,0,0,0.1);
+      box-sizing: border-box; text-align: left; right: 0;
+    }
+    .page-title {
+      transform: translate(0,0); pointer-events: none;
+      background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00);
+      background-clip: text; -webkit-background-clip: text; color: transparent;
+      font-weight: bold; text-align: center; text-indent: 0;
+    }
+    .page-text {
+      mix-blend-mode: hard-light; color: #000; padding-left:1em; padding-right:1em;
+      font-size: calc(var(--font-size)*0.9); line-height: calc(var(--font-size) + 0.55rem); font-weight:bold;
+      pointer-events: auto !important;
+    }
+    .page-image {
+      position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;
+      pointer-events: none; opacity:0.8; z-index:0;
+    }
+    .turn { animation: turnForward var(--animation-duration) forwards; }
+    .turnBack { animation: turnBackward var(--animation-duration) forwards; }
+    .front-page, .back-page {
+      overflow: hidden; position: absolute; top:0; left:0; height:100%; width:100%;
+      pointer-events: none; right:0; bottom:0; margin:0; padding-top:1rem; z-index:1;
+    }
+    .back-page { transform: rotateY(180deg); visibility: hidden; }
+    .turn-page.turn > div.front-page { animation: fadeOut var(--animation-duration) forwards; }
+    .turn-page.turnBack > div.front-page { animation: fadeIn var(--animation-duration) forwards; }
+    .turn-page.turnBack > div.back-page { animation: fadeOut var(--animation-duration) forwards; }
+    .turn-page.turn > div.back-page { animation: fadeIn var(--animation-duration) forwards; }
+    @keyframes fadeOut {
+      0% { visibility: visible; } 49% { visibility: visible; }
+      50% { visibility: hidden; } 100% { visibility: hidden; }
+    }
+    @keyframes fadeIn {
+      0% { visibility: hidden; } 50% { visibility: hidden; }
+      51% { visibility: visible; } 100% { visibility: visible; }
+    }
+    @keyframes turnForward {
+      0% { z-index:999; } 40% { z-index:999; } 49% { transform: rotateY(-90deg); }
+      50% { transform: rotateY(-90deg); } 100% { transform: rotateY(-180deg); z-index: null; }
+    }
+    @keyframes turnBackward {
+      0% { z-index:999; } 40% { z-index:999; } 40% { z-index:999; } 49% { transform: rotateY(-90deg); }
+      50% { transform: rotateY(-90deg); } 100% { transform: rotateY(0deg); z-index: null; }
+    }
+    a {
+      color: #ffffff !important;
+      text-decoration: none !important;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="book"></div>
+  <script>
+    const book = document.querySelector(".book");
+    let isTurnIng = false;
+    let showPageNumber = 0;
+    let timer = null;
+
+    const pages = [
+      {
+        front: {
+          title: `<a href="book.html" target="_blank">United Kingdom</a>`,
+          text: "英国是全球顶尖留学目的地，教育体系成熟、学术声誉卓著，本科多3年、硕士多1年，高效获全球认可学历。院校资源丰富，涵盖G5等世界名校，申请看学术背景、GPA与语言成绩。PSW签证支持本科/硕士毕业生留英2年、博士3年就业。教育质量与就业支持兼具，适合高效提升学术与职业竞争力的学生。",
+          background: "英国.png",
+        },
+        back: { background: "英国背面.png" },
+      },
+      {
+        front: {
+          title: `<a href="aomen.html" target="_blank">澳門</a>`,
+          text: "澳门研究生教育获国家教育部认证，学制多为2年，部分商科/教育类1.5-2年，中英双语授课为主。申请核心看本科GPA与语言成绩，雅思通常6.0-6.5，部分中文授课专业接受CET-6或免语言。毕业生可获1年逗留签证留澳工作，学历可认证，适合预算有限、兼顾语言适应与大湾区发展的学生。",
+          background: "澳门.jpg",
+        },
+        back: { background: "澳门背面.jpg" },
+      },
+      {
+        front: {
+          title: `<a href="hongkong.html" target="_blank">香港</a>`,
+          text: "香港研究生教育获国家教育部认证，2026QS中5所高校稳居全球前100。硕士分授课型（学制1年）与研究型（学制2年），多为英语授课，申请核心看本科GPA与语言成绩，雅思通常6.0-6.5（单项≥5.5-6.0）。毕业生可获IANG签证留港2年工作，学历可认证，兼顾学术提升与职业发展。",
+          background: "香港.jpg",
+        },
+        back: { background:"香港背面.jpg" },
+      },
+      {
+        front: {
+          title: `<a href="australia.html" target="_blank">Australia</a>`,
+          text: "澳大利亚研究生教育受AQF体系规范，学位全球认可，八大名校稳居世界前列。硕士分授课型与研究型，学制1-2年，申请以本科GPA与语言成绩为核心。毕业生可获PSW工作签证，STEM与偏远地区可延签，学历获中留服认证，兼顾学术提升与职业发展。",
+          background: "澳洲.jpg",
+        },
+        back: { background: "澳洲背面.jpg" },
+      },
+      {
+        front: {
+          title: `<a href="singapore.html" target="_blank">Singapore</a>`,
+          text: "新加坡研究生教育获中国教育部认证，公立高校如NUS、NTU在2026QS稳居全球前15，学术认可度高。硕士分授课型（1-1.5年） 与研究型（2年），英语授课，申请核心看本科GPA与语言成绩，雅思通常6.5+（单项≥6.0），热门专业更高。毕业生可获1-6个月就业准证申请期，本地就业与回国落户均具优势，适合追求高效提升与亚洲职业发展的学生。",
+          background: "新加坡.jpg",
+        },
+        back: { background: "新加坡背面.jpg" },
+      },
+      {
+        front: {
+          title: `<a href="thailand.html" target="_blank">ประเทศไทย</a>`,
+          text: "泰国硕士学制1.5-2年，公立如朱拉隆功/玛希隆等学位获教育部认证。多英语授课，雅思通常5.5-6.5，部分可校内测试替代。公立年学费约1-3万，私立稍高，曼谷月生活费约2000-3000元，性价比突出。毕业生可申请1年求职签，东盟与中泰跨境就业优势明显。",
+          background: "泰国.jpg",
+        },
+        back: { background: "泰国背面.jpg" },
+      },
+      {
+        front: {
+          title: `<a href="canada.html" target="_blank">Canada</a>`,
+          text: "加拿大高校科研实力雄厚，多所大学位列世界前列，学术氛围严谨。硕士学制通常1-2年，分授课型与研究型，申请看重本科GPA、语言成绩及学术背景，雅思需6.5分以上。留学政策友好，提供PGWP工签，最长可获3年工作许可，移民路径清晰，就业与移民机会稳定，适合追求学术与长远发展的学生。",
+          background: "加拿大.jpg",
+        },
+        back: { background: "加拿大背面.jpg" },
+      },
+    ];
+
+    const covers = [
+      {
+        front: {
+          title: "『封面』",
+          background: "http://5b0988e595225.cdn.sohucs.com/images/20190602/4de5e4720e294714adf3f0f782c4f277.jpeg",
+        },
+        back: {},
+      },
+      {
+        front: {},
+        back: {
+          title: "",
+          background: "https://i04piccdn.sogoucdn.com/a608bd742dbf3629",
+        },
+      },
+    ];
+
+    function createPage(info = {}, isCover = false) {
+      const pageElement = document.createElement("div");
+      const pre = isCover ? "cover" : "page";
+      if (info.background) {
+        const img = document.createElement("img");
+        img.classList.add(`${pre}-image`);
+        img.src = info.background;
+        pageElement.appendChild(img);
+      }
+      if (info.title) {
+        const titleElement = document.createElement("div");
+        titleElement.innerHTML = info.title;
+        titleElement.classList.add(`${pre}-title`);
+        pageElement.appendChild(titleElement);
+      }
+      const textElement = document.createElement("div");
+      textElement.innerHTML = info.text || "";
+      textElement.classList.add(`${pre}-text`);
+      pageElement.appendChild(textElement);
+      return pageElement;
+    }
+
+    function createFrontAndBackPage(pageElement, page = {}, isCover = false) {
+      if (!isCover) pageElement.classList.add("page");
+      pageElement.classList.add("turn-page");
+      const frontPage = createPage(page.front, isCover);
+      frontPage.classList.add("front-page");
+      const backPage = createPage(page.back, isCover);
+      backPage.classList.add("back-page");
+      pageElement.appendChild(frontPage);
+      pageElement.appendChild(backPage);
+    }
+
+    function createPages(page) {
+      pages.reverse().forEach((page, index) => {
+        const pageElement = document.createElement("span");
+        createFrontAndBackPage(pageElement, page);
+        pageElement.setAttribute("data-index", pages.length - index);
+        book.appendChild(pageElement);
+      });
+    }
+
+    const coverEnd = document.createElement("span");
+    coverEnd.classList.add("cover");
+    coverEnd.classList.add("coverEnd");
+    coverEnd.setAttribute("data-index", pages.length + 1);
+    createFrontAndBackPage(coverEnd, covers[1], true);
+    book.appendChild(coverEnd);
+    createPages();
+    const cover = document.createElement("span");
+    cover.classList.add("cover");
+    cover.setAttribute("data-index", "0");
+    createFrontAndBackPage(cover, covers[0], true);
+    book.appendChild(cover);
+    const root = document.documentElement;
+    const computedStyle = getComputedStyle(root);
+    const duration = computedStyle.getPropertyValue("--animation-duration");
+
+    function turnPageFn() {
+      const coverElements = book.querySelectorAll(".cover");
+      const pageElements = book.querySelectorAll(".page");
+      pageElements.forEach((page) => page.addEventListener("click", pageClick));
+      coverElements.forEach((cover) => cover.addEventListener("click", pageClick));
+    }
+    function calZIndex(selector = ".turn") {
+      const turnedPages = document.querySelectorAll(selector);
+      return turnedPages.length + 1;
+    }
+    function pageClick(e) {
+      if (e.target.closest('a')) return;
+      const target = e.currentTarget;
+      const index = parseInt(target.getAttribute("data-index"));
+      if (![showPageNumber, showPageNumber - 1].includes(index)) return;
+      if (target.classList.contains("turn")) {
+        if (isTurnIng === "turnBack") return;
+        showPageNumber = index;
+        isTurnIng = "turn";
+        target.style.transform = "rotateY(-180deg)";
+        target.classList.remove("turn");
+        target.classList.add("turnBack");
+        target.style.zIndex = null;
+      } else {
+        if (isTurnIng === "turn") return;
+        showPageNumber = index + 1;
+        isTurnIng = "turnBack";
+        target.style.transform = "rotateY(0deg)";
+        target.classList.remove("turnBack");
+        target.classList.add("turn");
+        target.style.zIndex = calZIndex();
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => { isTurnIng = false; }, parseFloat(duration) * 1000);
+    }
+    turnPageFn();
+  </script>
+</body>
+</html>
